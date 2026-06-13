@@ -90,43 +90,43 @@ export default function FeedbackForm() {
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="space-y-2 text-sm text-slate-700">
+        <label className="space-y-2 text-sm text-slate-300">
           <span>Name</span>
           <input
             type="text"
             value={formData.name}
             onChange={(event) => handleChange('name', event.target.value)}
-            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </label>
-        <label className="space-y-2 text-sm text-slate-700">
+        <label className="space-y-2 text-sm text-slate-300">
           <span>Email</span>
           <input
             type="email"
             value={formData.email}
             onChange={(event) => handleChange('email', event.target.value)}
-            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </label>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="space-y-2 text-sm text-slate-700">
+        <label className="space-y-2 text-sm text-slate-300">
           <span>Country</span>
           <input
             type="text"
             value={formData.country}
             onChange={(event) => handleChange('country', event.target.value)}
-            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
         </label>
-        <label className="space-y-2 text-sm text-slate-700">
+        <label className="space-y-2 text-sm text-slate-300">
           <span>Device Type</span>
           <select
             value={formData.deviceType}
             onChange={(event) => handleChange('deviceType', event.target.value)}
-            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           >
             {deviceTypes.map((option) => (
               <option key={option} value={option}>{option}</option>
@@ -135,24 +135,24 @@ export default function FeedbackForm() {
         </label>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="space-y-2 text-sm text-slate-700">
+        <label className="space-y-2 text-sm text-slate-300">
           <span>Experience Rating</span>
           <select
             value={formData.rating}
             onChange={(event) => handleChange('rating', event.target.value)}
-            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           >
             {[5, 4, 3, 2, 1].map((value) => (
               <option key={value} value={value}>{value} Star{value > 1 ? 's' : ''}</option>
             ))}
           </select>
         </label>
-        <label className="space-y-2 text-sm text-slate-700">
+        <label className="space-y-2 text-sm text-slate-300">
           <span>How often do you manage your finances?</span>
           <select
             value={formData.financeFrequency}
             onChange={(event) => handleChange('financeFrequency', event.target.value)}
-            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           >
             {financeFrequencyOptions.map((option) => (
               <option key={option} value={option}>{option}</option>
@@ -160,55 +160,55 @@ export default function FeedbackForm() {
           </select>
         </label>
       </div>
-      <label className="space-y-2 text-sm text-slate-700">
+      <label className="space-y-2 text-sm text-slate-300">
         <span>Favorite Feature</span>
         <input
           type="text"
           value={formData.favoriteFeature}
           onChange={(event) => handleChange('favoriteFeature', event.target.value)}
-          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
         />
       </label>
-      <label className="space-y-2 text-sm text-slate-700">
+      <label className="space-y-2 text-sm text-slate-300">
         <span>Problems Encountered</span>
         <textarea
           value={formData.problemsEncountered}
           onChange={(event) => handleChange('problemsEncountered', event.target.value)}
           rows="4"
-          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
         />
       </label>
-      <label className="space-y-2 text-sm text-slate-700">
+      <label className="space-y-2 text-sm text-slate-300">
         <span>Suggested Features</span>
         <textarea
           value={formData.suggestedFeatures}
           onChange={(event) => handleChange('suggestedFeatures', event.target.value)}
           rows="4"
-          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
         />
       </label>
-      <label className="space-y-2 text-sm text-slate-700">
+      <label className="space-y-2 text-sm text-slate-300">
         <span>Overall Feedback</span>
         <textarea
           value={formData.overallFeedback}
           onChange={(event) => handleChange('overallFeedback', event.target.value)}
           rows="4"
-          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          className="w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
         />
       </label>
-      <label className="flex items-center gap-3 text-sm text-slate-700">
+      <label className="flex items-center gap-3 text-sm text-slate-300">
         <input
           type="checkbox"
           checked={formData.futureTester}
           onChange={(event) => handleChange('futureTester', event.target.checked)}
-          className="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary"
+          className="h-5 w-5 rounded border-slate-600 bg-slate-900 text-primary focus:ring-primary"
         />
         Would you like to join future testing programs?
       </label>
       <button
         type="submit"
         disabled={isDisabled}
-        className="inline-flex w-full items-center justify-center rounded-full bg-deepblue px-6 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-60 hover:bg-[#152F6A]"
+        className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 transition disabled:cursor-not-allowed disabled:opacity-60 hover:opacity-95"
       >
         {status === 'submitting' ? 'Submitting...' : 'Submit Feedback'}
       </button>
