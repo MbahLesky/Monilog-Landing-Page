@@ -7,6 +7,7 @@ import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 import { Reveal, RevealHeading } from '../components/Reveal';
 import HorizontalDeck from '../components/HorizontalDeck';
+import Parallax from '../components/Parallax';
 
 const navItems = ['Features', 'Screenshots', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
@@ -198,7 +199,7 @@ export default function Home() {
               </Reveal>
             </div>
 
-            <div className="relative mx-auto max-w-lg">
+            <Parallax strength={36} className="relative mx-auto max-w-lg">
               <div className="absolute -left-10 top-12 h-28 w-28 rounded-3xl bg-primary/15 blur-2xl" />
               <div className="absolute right-8 top-[-18px] h-24 w-24 rounded-3xl bg-secondary/20 blur-2xl" />
               <div className="relative overflow-hidden rounded-[2rem] border border-slate-800/80 bg-slate-900/90 p-5 shadow-soft">
@@ -213,7 +214,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="pointer-events-none absolute bottom-4 left-1/2 h-20 w-20 -translate-x-1/2 rounded-full bg-primary/15 blur-2xl" />
-            </div>
+            </Parallax>
           </div>
         </Slide>
 
@@ -262,7 +263,9 @@ export default function Home() {
             items={carouselItems}
             renderCard={(item) => (
               <div className="h-full rounded-[1.75rem] border border-white/10 bg-slate-900/90 p-6">
-                <div className="h-72 overflow-hidden rounded-3xl bg-slate-800" />
+                <div className="h-72 overflow-hidden rounded-3xl bg-slate-800">
+                  <Parallax strength={24} className="h-[130%] w-full bg-gradient-to-b from-slate-700 to-slate-900" />
+                </div>
                 <p className="mt-5 text-lg font-semibold text-white">{item}</p>
               </div>
             )}
