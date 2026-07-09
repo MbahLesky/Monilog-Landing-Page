@@ -1,13 +1,13 @@
 'use client';
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useFullPageScroll } from './FullPageScroll';
-import { useIsDesktop } from '../hooks/useMediaQuery';
+import { useIsDesktop, usePrefersReducedMotion } from '../hooks/useMediaQuery';
 
 export default function Parallax({ children, strength = 40, className = '' }) {
   const ref = useRef(null);
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const isDesktop = useIsDesktop();
   const { containerRef } = useFullPageScroll();
 

@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, animate, useReducedMotion, useInView } from 'framer-motion';
-import { useIsDesktop } from '../hooks/useMediaQuery';
+import { motion, useMotionValue, animate, useInView } from 'framer-motion';
+import { useIsDesktop, usePrefersReducedMotion } from '../hooks/useMediaQuery';
 import { useFullPageScroll } from './FullPageScroll';
 
 const SPRING = { type: 'spring', stiffness: 260, damping: 30 };
@@ -10,7 +10,7 @@ const GAP = 24; // px, matches Tailwind gap-6 on the track
 
 export default function HorizontalDeck({ slideId, items, renderCard, ariaLabel }) {
   const isDesktop = useIsDesktop();
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const { activeId } = useFullPageScroll();
   const isActive = activeId === slideId;
 

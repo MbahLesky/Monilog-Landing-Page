@@ -1,7 +1,8 @@
 'use client';
 
 import { Fragment } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { usePrefersReducedMotion } from '../hooks/useMediaQuery';
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -15,7 +16,7 @@ const fadeUp = {
 };
 
 export function Reveal({ as = 'div', children, className = '', delay = 0, amount = 0.4 }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const MotionTag = motion[as] || motion.div;
   if (reduce) {
     const Tag = as;
@@ -49,7 +50,7 @@ const wordChild = {
 // The inter-word space is a text node between masks so spacing and line
 // wrapping are preserved (a trailing space inside an inline-block collapses).
 export function RevealHeading({ as = 'h2', text, className = '', amount = 0.5 }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const MotionTag = motion[as] || motion.h2;
   if (reduce) {
     const Tag = as;

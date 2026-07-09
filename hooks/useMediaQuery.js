@@ -23,3 +23,12 @@ export function useMediaQuery(query) {
 export function useIsDesktop() {
   return useMediaQuery('(min-width: 768px) and (pointer: fine)');
 }
+
+// Hydration-safe reduced-motion signal. Unlike framer-motion's useReducedMotion
+// (which reads matchMedia during render and so returns true on the client's
+// first render while the server returns false — a hydration mismatch), this
+// returns false on the server AND the first client render, then updates after
+// mount. Callers must therefore render the animated tree on first paint.
+export function usePrefersReducedMotion() {
+  return useMediaQuery('(prefers-reduced-motion: reduce)');
+}
