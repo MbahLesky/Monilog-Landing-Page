@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import FeedbackForm from '../components/FeedbackForm';
 import { FullPageScrollProvider, ScrollViewport } from '../components/FullPageScroll';
 import Slide from '../components/Slide';
+import ProgressBar from '../components/ProgressBar';
 
 const navItems = ['Features', 'Screenshots', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
@@ -78,6 +79,7 @@ export default function Home() {
 
   return (
     <FullPageScrollProvider>
+      <ProgressBar />
       <header className="fixed top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
           <div className="flex items-center gap-3 text-2xl font-semibold text-white">
