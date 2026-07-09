@@ -6,6 +6,7 @@ import FeedbackForm from '../components/FeedbackForm';
 import { FullPageScrollProvider, ScrollViewport, useFullPageScroll } from '../components/FullPageScroll';
 import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
+import { Reveal, RevealHeading } from '../components/Reveal';
 
 const navItems = ['Features', 'Screenshots', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
@@ -169,30 +170,32 @@ export default function Home() {
           <div className="pointer-events-none absolute right-0 top-24 h-72 w-72 translate-x-1/3 rounded-full bg-secondary/15 blur-3xl" />
           <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-slate-900/80 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
+              <Reveal className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-slate-900/80 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
                 Version 1 Beta Testing
-              </div>
-              <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl">
-                Take Control of Your Money, One Transaction at a Time.
-              </h1>
-              <p className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+              </Reveal>
+              <RevealHeading
+                as="h1"
+                text="Take Control of Your Money, One Transaction at a Time."
+                className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
+              />
+              <Reveal as="p" delay={1} className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
                 MoniLog helps you track income, expenses, debts, loans, savings, and financial goals with ease. Built for simplicity, speed, and complete visibility over your finances.
-              </p>
-              <div className="flex flex-wrap gap-4">
+              </Reveal>
+              <Reveal delay={2} className="flex flex-wrap gap-4">
                 <a href={apkDownloadUrl} download className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
                   Download Beta
                 </a>
                 <a href="#features" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800">
                   Learn More
                 </a>
-              </div>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              </Reveal>
+              <Reveal delay={3} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {['Offline First', 'No Account Required', 'Fast & Lightweight', 'Local Data Storage'].map((item) => (
                   <div key={item} className="rounded-3xl border border-slate-800/80 bg-slate-900/80 px-4 py-3 text-sm font-medium text-slate-200 shadow-sm">
                     {item}
                   </div>
                 ))}
-              </div>
+              </Reveal>
             </div>
 
             <div className="relative mx-auto max-w-lg">
@@ -217,11 +220,11 @@ export default function Home() {
         {/* Slide 2: Features */}
         <Slide id="features">
           <div className="mb-12 space-y-4 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Features</p>
-            <h2 className="text-3xl font-semibold text-white sm:text-4xl">Everything You Need to Track Your Finances</h2>
-            <p className="mx-auto max-w-2xl text-base leading-8 text-slate-300">
+            <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Features</Reveal>
+            <RevealHeading text="Everything You Need to Track Your Finances" className="text-3xl font-semibold text-white sm:text-4xl" />
+            <Reveal as="p" delay={1} className="mx-auto max-w-2xl text-base leading-8 text-slate-300">
               MoniLog Version 1 focuses on the essentials of personal finance management, providing a fast, simple, and reliable offline experience.
-            </p>
+            </Reveal>
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
             {features.map((item) => (
@@ -247,8 +250,8 @@ export default function Home() {
         {/* Slide 3: Screenshots */}
         <Slide id="screenshots" className="text-white">
           <div className="mb-10 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">See MoniLog in Action</p>
-            <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">See MoniLog in Action</h2>
+            <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">See MoniLog in Action</Reveal>
+            <RevealHeading text="See MoniLog in Action" className="mt-3 text-3xl font-semibold sm:text-4xl" />
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {carouselItems.map((item) => (
@@ -263,12 +266,12 @@ export default function Home() {
         {/* Slide 4: Why MoniLog */}
         <Slide id="why">
           <div className="grid gap-6 lg:grid-cols-3">
-            {whyItems.map((item) => (
-              <div key={item.title} className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/90 p-8 shadow-soft">
+            {whyItems.map((item, i) => (
+              <Reveal key={item.title} delay={i} className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/90 p-8 shadow-soft">
                 <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">{item.title}</p>
                 <p className="mt-4 text-lg font-semibold text-white">{item.title}</p>
                 <p className="mt-3 text-slate-300">{item.body}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </Slide>
@@ -279,11 +282,11 @@ export default function Home() {
             <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-8 shadow-soft sm:p-10">
               <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Currently in Beta</p>
-                  <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">MoniLog Version 1 is actively being tested and improved.</h2>
-                  <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
+                  <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Currently in Beta</Reveal>
+                  <RevealHeading text="MoniLog Version 1 is actively being tested and improved." className="mt-3 text-3xl font-semibold text-white sm:text-4xl" />
+                  <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
                     Features may evolve based on user feedback and real-world usage.
-                  </p>
+                  </Reveal>
                 </div>
                 <div className="rounded-3xl bg-slate-950/95 px-5 py-4 text-white shadow-xl sm:px-6">
                   <p className="text-sm uppercase tracking-[0.2em] text-slate-300">Beta Access</p>
@@ -302,11 +305,11 @@ export default function Home() {
             <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-10 shadow-soft">
               <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
                 <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Help Shape the Future of MoniLog</p>
-                  <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Version 1 is our foundational release focused on offline personal finance management.</h2>
-                  <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
+                  <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Help Shape the Future of MoniLog</Reveal>
+                  <RevealHeading text="Version 1 is our foundational release focused on offline personal finance management." className="mt-3 text-3xl font-semibold text-white sm:text-4xl" />
+                  <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
                     As a beta tester, your feedback directly influences future updates and features.
-                  </p>
+                  </Reveal>
                 </div>
                 <div className="rounded-[1.5rem] bg-slate-950 p-8 text-white">
                   <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Current Focus</p>
@@ -329,9 +332,9 @@ export default function Home() {
           <div className="rounded-[1.75rem] bg-gradient-to-r from-primary to-secondary px-8 py-12 text-white shadow-soft sm:px-12">
             <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-white/80">Start Managing Your Finances Better</p>
-                <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">Join our beta community and help shape the future of MoniLog.</h2>
-                <p className="mt-4 max-w-2xl text-base leading-7 text-white/90">Version 1.0 Beta</p>
+                <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-white/80">Start Managing Your Finances Better</Reveal>
+                <RevealHeading text="Join our beta community and help shape the future of MoniLog." className="mt-3 text-3xl font-semibold sm:text-4xl" />
+                <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-7 text-white/90">Version 1.0 Beta</Reveal>
               </div>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <a href={apkDownloadUrl} download className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-deepblue transition hover:bg-slate-100">
@@ -350,11 +353,11 @@ export default function Home() {
           <section id="feedback" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Help Us Improve MoniLog</p>
-                <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">We’re actively collecting feedback from beta testers.</h2>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
+                <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Help Us Improve MoniLog</Reveal>
+                <RevealHeading text="We’re actively collecting feedback from beta testers." className="mt-3 text-3xl font-semibold text-white sm:text-4xl" />
+                <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
                   Tell us what's working, what isn't, and what you'd like to see next.
-                </p>
+                </Reveal>
               </div>
               <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-8 shadow-soft">
                 <FeedbackForm />
@@ -365,8 +368,8 @@ export default function Home() {
           <section id="faq" className="px-6 pb-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-10 shadow-soft">
               <div className="mb-10 text-center">
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">FAQ</p>
-                <h2 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">Frequently Asked Questions</h2>
+                <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">FAQ</Reveal>
+                <RevealHeading text="Frequently Asked Questions" className="mt-3 text-3xl font-semibold text-white sm:text-4xl" />
               </div>
               <div className="grid gap-5 md:grid-cols-2">
                 {faqs.map((item) => (
