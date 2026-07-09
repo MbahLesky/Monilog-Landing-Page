@@ -12,6 +12,7 @@ export default function HorizontalDeck({ slideId, items, renderCard, ariaLabel }
   const isDesktop = useIsDesktop();
   const reduce = useReducedMotion();
   const { activeId } = useFullPageScroll();
+  const isActive = activeId === slideId;
 
   const viewportRef = useRef(null);
   const [index, setIndex] = useState(0);
@@ -62,6 +63,39 @@ export default function HorizontalDeck({ slideId, items, renderCard, ariaLabel }
     },
     [next, prev]
   );
+
+  // Hybrid wheel capture: while this deck is the active slide, translate vertical
+  // wheel intent into horizontal card movement — but release at the ends so the
+  // page can snap to the neighboring slide.
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || !isDesktop || reduce) return;
+
+    let acc = 0;
+    let cooldown = false;
+    const THRESHOLD = 40;
+
+    const onWheel = (e) => {
+      if (!isActive) return;
+      const delta = e.deltaY;
+      const atStart = index === 0;
+      const atEnd = index === items.length - 1;
+      // Let the page scroll (vertical snap) when pushing past an end.
+      if ((atStart && delta < 0) || (atEnd && delta > 0)) return;
+      e.preventDefault();
+      if (cooldown) return;
+      acc += delta;
+      if (Math.abs(acc) >= THRESHOLD) {
+        if (acc > 0) next(); else prev();
+        acc = 0;
+        cooldown = true;
+        setTimeout(() => { cooldown = false; }, 350);
+      }
+    };
+
+    viewport.addEventListener('wheel', onWheel, { passive: false });
+    return () => viewport.removeEventListener('wheel', onWheel);
+  }, [isDesktop, reduce, isActive, index, items.length, next, prev]);
 
   const onDragEnd = (_e, info) => {
     if (metrics.cardStep === 0) return;
