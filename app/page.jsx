@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import FeedbackForm from '../components/FeedbackForm';
 import { FullPageScrollProvider, ScrollViewport, useFullPageScroll } from '../components/FullPageScroll';
 import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 import { Reveal, RevealHeading } from '../components/Reveal';
+import HorizontalDeck from '../components/HorizontalDeck';
 
 const navItems = ['Features', 'Screenshots', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
@@ -226,9 +226,12 @@ export default function Home() {
               MoniLog Version 1 focuses on the essentials of personal finance management, providing a fast, simple, and reliable offline experience.
             </Reveal>
           </div>
-          <div className="grid gap-6 lg:grid-cols-2">
-            {features.map((item) => (
-              <motion.article key={item.title} whileHover={{ y: -4 }} className="overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-900 p-8 shadow-soft">
+          <HorizontalDeck
+            slideId="features"
+            ariaLabel="Feature highlights"
+            items={features}
+            renderCard={(item) => (
+              <article className="h-full overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-900 p-8 shadow-soft transition hover:border-primary/50">
                 <div className="inline-flex rounded-3xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
                   {item.label}
                 </div>
@@ -242,9 +245,9 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-              </motion.article>
-            ))}
-          </div>
+              </article>
+            )}
+          />
         </Slide>
 
         {/* Slide 3: Screenshots */}
@@ -253,14 +256,17 @@ export default function Home() {
             <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">See MoniLog in Action</Reveal>
             <RevealHeading text="See MoniLog in Action" className="mt-3 text-3xl font-semibold sm:text-4xl" />
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {carouselItems.map((item) => (
-              <div key={item} className="group rounded-[1.75rem] border border-white/10 bg-slate-900/90 p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/60">
-                <div className="h-48 rounded-3xl bg-slate-800" />
+          <HorizontalDeck
+            slideId="screenshots"
+            ariaLabel="App screenshots"
+            items={carouselItems}
+            renderCard={(item) => (
+              <div className="h-full rounded-[1.75rem] border border-white/10 bg-slate-900/90 p-6">
+                <div className="h-72 overflow-hidden rounded-3xl bg-slate-800" />
                 <p className="mt-5 text-lg font-semibold text-white">{item}</p>
               </div>
-            ))}
-          </div>
+            )}
+          />
         </Slide>
 
         {/* Slide 4: Why MoniLog */}
