@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import FeedbackForm from '../components/FeedbackForm';
-import { FullPageScrollProvider, ScrollViewport } from '../components/FullPageScroll';
+import { FullPageScrollProvider, ScrollViewport, useFullPageScroll } from '../components/FullPageScroll';
 import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 
@@ -74,66 +74,93 @@ const faqs = [
   { q: 'How can I submit feedback?', a: 'Use the feedback form below to share your experience, report issues, and suggest new features.' }
 ];
 
-export default function Home() {
+function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { activeId, containerRef } = useFullPageScroll();
+
+  const toId = (item) => item.toLowerCase().replace(/\s+/g, '-');
+
+  const scrollTo = (id) => (e) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const el = containerRef.current?.querySelector(`#${id}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <FullPageScrollProvider>
-      <ProgressBar />
-      <header className="fixed top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
-          <div className="flex items-center gap-3 text-2xl font-semibold text-white">
-            <img
-              src="/icons/monilog_icon.png"
-              alt="MoniLog logo"
-              className="h-10 w-10 rounded-2xl border border-primary bg-primary/15 object-cover"
-            />
-            MoniLog
-          </div>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-slate-300 md:flex">
-            {navItems.map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(/\s+/g, '-')}`} className="transition hover:text-primary">
+    <header className="fixed top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-8">
+        <a href="#hero" onClick={scrollTo('hero')} className="flex items-center gap-3 text-2xl font-semibold text-white">
+          <img
+            src="/icons/monilog_icon.png"
+            alt="MoniLog logo"
+            className="h-10 w-10 rounded-2xl border border-primary bg-primary/15 object-cover"
+          />
+          MoniLog
+        </a>
+        <nav className="hidden items-center gap-8 text-sm font-medium text-slate-300 md:flex">
+          {navItems.map((item) => {
+            const id = toId(item);
+            return (
+              <a
+                key={item}
+                href={`#${id}`}
+                onClick={scrollTo(id)}
+                className={`transition hover:text-primary ${activeId === id ? 'text-primary' : ''}`}
+              >
                 {item}
               </a>
-            ))}
-          </nav>
-          <div className="hidden md:block">
-            <a href={apkDownloadUrl} download className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
-              Download Beta
-            </a>
-          </div>
-          <button
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-200 shadow-sm transition hover:bg-slate-800 md:hidden"
-          >
-            {mobileMenuOpen ? 'Close' : 'Menu'}
-          </button>
+            );
+          })}
+        </nav>
+        <div className="hidden md:block">
+          <a href={apkDownloadUrl} download className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
+            Download Beta
+          </a>
         </div>
-        {mobileMenuOpen && (
-          <div className="border-t border-slate-800 bg-slate-950 pb-6 md:hidden">
-            <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 pt-6 sm:px-8">
-              {navItems.map((item) => (
+        <button
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-200 shadow-sm transition hover:bg-slate-800 md:hidden"
+        >
+          {mobileMenuOpen ? 'Close' : 'Menu'}
+        </button>
+      </div>
+      {mobileMenuOpen && (
+        <div className="border-t border-slate-800 bg-slate-950 pb-6 md:hidden">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 pt-6 sm:px-8">
+            {navItems.map((item) => {
+              const id = toId(item);
+              return (
                 <a
                   key={item}
-                  href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+                  href={`#${id}`}
+                  onClick={scrollTo(id)}
                   className="rounded-3xl border border-slate-800 bg-slate-900 px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-slate-800 hover:text-primary"
-                  onClick={() => setMobileMenuOpen(false)}
                 >
                   {item}
                 </a>
-              ))}
-              <a
-                href={apkDownloadUrl}
-                download
-                onClick={() => setMobileMenuOpen(false)}
-                className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
-              >
-                Download Beta
-              </a>
-            </div>
+              );
+            })}
+            <a
+              href={apkDownloadUrl}
+              download
+              onClick={() => setMobileMenuOpen(false)}
+              className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
+            >
+              Download Beta
+            </a>
           </div>
-        )}
-      </header>
+        </div>
+      )}
+    </header>
+  );
+}
+
+export default function Home() {
+  return (
+    <FullPageScrollProvider>
+      <ProgressBar />
+      <SiteHeader />
 
       <ScrollViewport>
         {/* Slide 1: Hero */}
