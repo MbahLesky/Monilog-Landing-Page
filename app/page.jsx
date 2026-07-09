@@ -287,8 +287,8 @@ export default function Home() {
 
         {/* Slide 5: Beta Program (folds in the "Currently in Beta" banner) */}
         <Slide id="beta-program">
-          <div className="space-y-8">
-            <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-8 shadow-soft sm:p-10">
+          <div className="space-y-6">
+            <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-soft sm:p-8">
               <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Currently in Beta</Reveal>
@@ -302,17 +302,17 @@ export default function Home() {
                   <p className="mt-2 text-2xl font-semibold">Early users influence every release.</p>
                 </div>
               </div>
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 {['Early access benefits', 'Opportunity to influence future features', 'Direct feedback channel'].map((item) => (
-                  <div key={item} className="rounded-3xl border border-slate-800/80 bg-slate-900/80 px-5 py-5 shadow-sm">
+                  <div key={item} className="rounded-3xl border border-slate-800/80 bg-slate-900/80 px-5 py-4 shadow-sm">
                     <p className="font-semibold text-slate-100">{item}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-10 shadow-soft">
-              <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-soft sm:p-8">
+              <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
                 <div>
                   <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Help Shape the Future of MoniLog</Reveal>
                   <RevealHeading text="Version 1 is our foundational release focused on offline personal finance management." className="mt-3 text-3xl font-semibold text-white sm:text-4xl" />

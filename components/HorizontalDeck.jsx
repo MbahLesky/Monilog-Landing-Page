@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, animate, useReducedMotion } from 'framer-motion';
+import { motion, useMotionValue, animate, useReducedMotion, useInView } from 'framer-motion';
 import { useIsDesktop } from '../hooks/useMediaQuery';
 import { useFullPageScroll } from './FullPageScroll';
 
@@ -15,6 +15,7 @@ export default function HorizontalDeck({ slideId, items, renderCard, ariaLabel }
   const isActive = activeId === slideId;
 
   const viewportRef = useRef(null);
+  const inView = useInView(viewportRef, { amount: 0.3, once: true });
   const [index, setIndex] = useState(0);
   const [metrics, setMetrics] = useState({ cardStep: 0, cardWidth: 0, containerWidth: 0 });
   const x = useMotionValue(0);
@@ -150,8 +151,12 @@ export default function HorizontalDeck({ slideId, items, renderCard, ariaLabel }
                 key={i}
                 data-card
                 className="w-[340px] shrink-0 sm:w-[380px] lg:w-[420px]"
-                animate={{ scale, opacity }}
-                transition={reduce ? { duration: 0 } : SPRING}
+                animate={{
+                  scale,
+                  opacity: reduce ? 1 : (inView ? opacity : 0),
+                  y: reduce ? 0 : (inView ? 0 : 28)
+                }}
+                transition={reduce ? { duration: 0 } : { ...SPRING, delay: inView ? Math.min(i, 6) * 0.05 : 0 }}
               >
                 {renderCard(item, i, { isCurrent: i === index })}
               </motion.div>
