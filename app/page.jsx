@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import FeedbackForm from '../components/FeedbackForm';
+import { useEffect, useRef, useState } from 'react';
 import { FullPageScrollProvider, ScrollViewport, useFullPageScroll } from '../components/FullPageScroll';
 import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 import { Reveal, RevealHeading } from '../components/Reveal';
 import HorizontalDeck from '../components/HorizontalDeck';
 import Parallax from '../components/Parallax';
+import { useAuth } from '../context/AuthContext';
 
-const navItems = ['Features', 'Screenshots', 'Beta Program', 'Feedback'];
+const navItems = ['Features', 'Screenshots', 'Beta Program'];
 const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
 const features = [
   {
@@ -73,12 +73,124 @@ const faqs = [
   { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
   { q: 'Will iOS be supported?', a: 'iOS support is under consideration as we prioritize a stable Android beta and strong cross-platform foundations.' },
   { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
-  { q: 'How can I submit feedback?', a: 'Use the feedback form below to share your experience, report issues, and suggest new features.' }
+  { q: 'How can I submit feedback?', a: 'Feedback tools are coming soon. As the beta progresses, we will share dedicated forms for each test scenario.' }
 ];
+
+function useGatedDownload() {
+  const { user, openAuthModal } = useAuth();
+  return (event) => {
+    if (!user) {
+      event.preventDefault();
+      openAuthModal({ mode: 'signup', intent: 'download' });
+    }
+    // When signed in, let the <a download> proceed normally.
+  };
+}
+
+function HeaderAuth({ variant = 'desktop', onNavigate }) {
+  const { user, loading, openAuthModal, signOut } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const onClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [menuOpen]);
+
+  const handleSignOut = async () => {
+    setMenuOpen(false);
+    onNavigate?.();
+    await signOut();
+  };
+
+  if (loading) {
+    return <div className="h-9 w-24 rounded-full bg-slate-800/60" aria-hidden="true" />;
+  }
+
+  if (!user) {
+    return (
+      <button
+        type="button"
+        onClick={() => {
+          onNavigate?.();
+          openAuthModal({ mode: 'signin' });
+        }}
+        className={`rounded-full border border-slate-700 bg-slate-900 px-5 text-sm font-semibold text-slate-100 transition hover:bg-slate-800 ${
+          variant === 'mobile' ? 'py-3' : 'py-2.5'
+        }`}
+      >
+        Sign in
+      </button>
+    );
+  }
+
+  const displayName = user.displayName || 'MoniLog tester';
+  const initial = (user.displayName || user.email || '?').charAt(0).toUpperCase();
+
+  if (variant === 'mobile') {
+    return (
+      <div className="rounded-3xl border border-slate-800 bg-slate-900 px-5 py-4">
+        <div className="flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-slate-950">
+            {initial}
+          </span>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium text-white">{displayName}</p>
+            <p className="truncate text-xs text-slate-400">{user.email}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="mt-4 w-full rounded-full border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+        >
+          Sign out
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        type="button"
+        onClick={() => setMenuOpen((v) => !v)}
+        aria-haspopup="true"
+        aria-expanded={menuOpen}
+        className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 py-1.5 pl-1.5 pr-4 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+      >
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-semibold text-slate-950">
+          {initial}
+        </span>
+        <span className="max-w-[9rem] truncate">{displayName}</span>
+      </button>
+      {menuOpen && (
+        <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-slate-800 bg-slate-900 p-2 shadow-xl">
+          <div className="border-b border-slate-800 px-3 py-2">
+            <p className="truncate text-sm font-medium text-white">{displayName}</p>
+            <p className="truncate text-xs text-slate-400">{user.email}</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="mt-1 w-full rounded-xl px-3 py-2 text-left text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+          >
+            Sign out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { activeId, containerRef } = useFullPageScroll();
+  const onGatedDownload = useGatedDownload();
 
   const toId = (item) => item.toLowerCase().replace(/\s+/g, '-');
 
@@ -115,8 +227,9 @@ function SiteHeader() {
             );
           })}
         </nav>
-        <div className="hidden md:block">
-          <a href={apkDownloadUrl} download className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
+        <div className="hidden items-center gap-3 md:flex">
+          <HeaderAuth />
+          <a href={apkDownloadUrl} download onClick={onGatedDownload} className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
             Download Beta
           </a>
         </div>
@@ -146,11 +259,15 @@ function SiteHeader() {
             <a
               href={apkDownloadUrl}
               download
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                onGatedDownload(e);
+                setMobileMenuOpen(false);
+              }}
               className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
             >
               Download Beta
             </a>
+            <HeaderAuth variant="mobile" onNavigate={() => setMobileMenuOpen(false)} />
           </div>
         </div>
       )}
@@ -159,6 +276,9 @@ function SiteHeader() {
 }
 
 export default function Home() {
+  const { openAuthModal } = useAuth();
+  const onGatedDownload = useGatedDownload();
+
   return (
     <FullPageScrollProvider>
       <ProgressBar />
@@ -183,7 +303,7 @@ export default function Home() {
                 MoniLog helps you track income, expenses, debts, loans, savings, and financial goals with ease. Built for simplicity, speed, and complete visibility over your finances.
               </Reveal>
               <Reveal delay={2} className="flex flex-wrap gap-4">
-                <a href={apkDownloadUrl} download className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
+                <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
                   Download Beta
                 </a>
                 <a href="#features" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800">
@@ -346,35 +466,24 @@ export default function Home() {
                 <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-7 text-white/90">Version 1.0 Beta</Reveal>
               </div>
               <div className="flex flex-col gap-4 sm:flex-row">
-                <a href={apkDownloadUrl} download className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-deepblue transition hover:bg-slate-100">
+                <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-deepblue transition hover:bg-slate-100">
                   Download Android APK
                 </a>
-                <a href="#feedback" className="inline-flex items-center justify-center rounded-full border border-white/90 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20">
+                <button
+                  type="button"
+                  onClick={() => openAuthModal({ mode: 'signup' })}
+                  className="inline-flex items-center justify-center rounded-full border border-white/90 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+                >
                   Join Beta Testing
-                </a>
+                </button>
               </div>
             </div>
           </div>
         </Slide>
 
-        {/* Tail: Feedback + FAQ + Footer scroll freely */}
+        {/* Tail: FAQ + Footer scroll freely */}
         <div className="snap-tail bg-slate-950 text-slate-100">
-          <section id="feedback" className="px-6 py-24 sm:px-8 lg:px-10">
-            <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-              <div>
-                <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Help Us Improve MoniLog</Reveal>
-                <RevealHeading text="We’re actively collecting feedback from beta testers." className="mt-3 text-3xl font-semibold text-white sm:text-4xl" />
-                <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
-                  Tell us what's working, what isn't, and what you'd like to see next.
-                </Reveal>
-              </div>
-              <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-8 shadow-soft">
-                <FeedbackForm />
-              </div>
-            </div>
-          </section>
-
-          <section id="faq" className="px-6 pb-24 sm:px-8 lg:px-10">
+          <section id="faq" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-10 shadow-soft">
               <div className="mb-10 text-center">
                 <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">FAQ</Reveal>
@@ -406,7 +515,7 @@ export default function Home() {
                   <ul className="mt-4 space-y-3 text-slate-400">
                     <li><a href="#features" className="hover:text-primary">Features</a></li>
                     <li><a href="#screenshots" className="hover:text-primary">Screenshots</a></li>
-                    <li><a href="#feedback" className="hover:text-primary">Feedback</a></li>
+                    <li><a href="#beta-program" className="hover:text-primary">Beta Program</a></li>
                   </ul>
                 </div>
                 <div>
