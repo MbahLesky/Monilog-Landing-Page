@@ -1,4 +1,7 @@
 import './globals.css';
+import { AuthProvider } from '../context/AuthContext';
+import AuthModal from '../components/AuthModal';
+import GoogleOneTap from '../components/GoogleOneTap';
 
 export const metadata = {
   title: 'MoniLog | Personal Finance Beta',
@@ -16,7 +19,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          {children}
+          <AuthModal />
+          <GoogleOneTap />
+        </AuthProvider>
+      </body>
     </html>
   );
 }
