@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getAdminAuth } from '../../../lib/firebaseAdmin';
+import { doc, setDoc } from 'firebase-admin/firestore';
+import { getAdminAuth, getAdminFirestore } from '../../../lib/firebaseAdmin';
 import { getSupabaseAdmin } from '../../../lib/supabaseAdmin';
 
 export const runtime = 'nodejs';
@@ -91,6 +92,26 @@ export async function POST(request) {
       console.error('Failed to set custom claims', claimError);
       // Best-effort: the tester row already exists; claims can be re-applied later.
     }
+
+    try {
+      const firestore = getAdminFirestore();
+      const testerRef = doc(firestore, 'testers', uid);
+      await setDoc(
+        testerRef,
+        {
+          name: name || '',
+          email: email || '',
+          code: normalizedCode || '',
+          provider,
+          registeredAt: new Date().toISOString()
+        },
+        { merge: true }
+      );
+    } catch (firestoreError) {
+      console.error('Failed to store tester in Firestore', firestoreError);
+      // Continue; Supabase record is valid and auth claims are set.
+    }
+
     return NextResponse.json({ status: 'ok', org });
   }
 
