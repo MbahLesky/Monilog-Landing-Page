@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -14,6 +14,7 @@ import {
   signOut as firebaseSignOut
 } from 'firebase/auth';
 import { getFirebaseAuth } from '../lib/firebase';
+import { storeTester, getBetaCodeInfo } from '../lib/firestore-testers';
 
 const APK_DOWNLOAD_URL = '/downloads/monilog-v1_1-release.apk';
 const BETA_CODE_STORAGE_KEY = 'monilog:betaCode';
@@ -64,7 +65,6 @@ export function AuthProvider({ children }) {
   // survives reloads and the Google popup. Codes are optional — a blank one just
   // registers a general tester.
   const [urlCode, setUrlCode] = useState('');
-  const autoOpenedRef = useRef(false);
 
   useEffect(() => {
     const auth = getFirebaseAuth();
@@ -101,14 +101,6 @@ export function AuthProvider({ children }) {
     setIsAuthModalOpen(false);
     setAuthIntent(null);
   }, []);
-
-  // A referral link should land visitors straight on the signup form with the
-  // code pre-filled — but only when nobody is signed in, and only once.
-  useEffect(() => {
-    if (loading || user || !urlCode || autoOpenedRef.current) return;
-    autoOpenedRef.current = true;
-    openAuthModal({ mode: 'signup', intent: 'download' });
-  }, [loading, user, urlCode, openAuthModal]);
 
   // Called by the modal after a successful auth action. Resolves any pending
   // intent (e.g. the download the user was gated on) and optionally keeps the
@@ -155,12 +147,10 @@ export function AuthProvider({ children }) {
 
   const resetPassword = useCallback((email) => sendPasswordResetEmail(requireAuth(), email), []);
 
-  // Registers the currently signed-in user as a beta tester. `code` is optional:
-  // with a valid code they're attributed to that org (per-code cap); without one
-  // they join the general pool (general cap). The server validates and enforces
-  // the cap; on any rejection it has already removed a just-created account, so
-  // we clear the local session too.
-  const registerTester = useCallback(async (code) => {
+  // Registers the currently signed-in user as a beta tester. Stores tester data
+  // in Firestore with their name, email, phone, and code. Returns the code info
+  // (or null if no code was used) so the modal can display it.
+  const registerTester = useCallback(async (code, { name = '', email = '', phone = '' } = {}) => {
     const auth = requireAuth();
     const current = auth.currentUser;
     if (!current) {
@@ -168,21 +158,37 @@ export function AuthProvider({ children }) {
       error.code = 'auth/no-current-user';
       throw error;
     }
-    const idToken = await current.getIdToken();
-    const res = await fetch('/api/register-tester', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken, code: normalizeCode(code) })
-    });
-    const data = await res.json().catch(() => ({ status: 'error' }));
 
-    if (data.status !== 'ok') {
-      await firebaseSignOut(auth).catch(() => {});
-    } else {
-      // The custom claim only lands in a freshly minted token — force a refresh.
-      await current.getIdToken(true).catch(() => {});
+    const normalizedCode = normalizeCode(code);
+    let codeInfo = null;
+
+    // Validate the code if provided.
+    if (normalizedCode) {
+      codeInfo = await getBetaCodeInfo(normalizedCode);
+      if (!codeInfo || !codeInfo.active) {
+        return { status: 'invalid_code', code: null };
+      }
+      // TODO: Enforce per-code tester cap when needed.
+      // For now, accept any active code.
     }
-    return data;
+
+    // Store the tester in Firestore.
+    try {
+      await storeTester(current.uid, {
+        name: name || current.displayName || '',
+        email: email || current.email || '',
+        phone: phone || '',
+        code: normalizedCode || ''
+      });
+    } catch (error) {
+      console.error('Failed to store tester:', error);
+      return { status: 'error', code: null };
+    }
+
+    return {
+      status: 'ok',
+      code: codeInfo || null
+    };
   }, []);
 
   const fetchBetaStatus = useCallback(async (code) => {
