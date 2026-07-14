@@ -72,3 +72,26 @@ select {
   background: #08D2B5;
   color: white;
 }
+
+@keyframes shimmerSweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.media-placeholder-shimmer {
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.1) 45%, transparent 80%);
+  transform: translateX(-120%);
+  animation: shimmerSweep 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-placeholder-shimmer {
+    animation: none;
+    transform: none;
+  }
+}

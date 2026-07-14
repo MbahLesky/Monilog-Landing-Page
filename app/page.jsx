@@ -6,10 +6,11 @@ import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 import { Reveal, RevealHeading } from '../components/Reveal';
 import HorizontalDeck from '../components/HorizontalDeck';
+import MediaPlaceholder from '../components/MediaPlaceholder';
 import Parallax from '../components/Parallax';
 import { useAuth } from '../context/AuthContext';
 
-const navItems = ['Features', 'Screenshots', 'Beta Program'];
+const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program'];
 const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
 const features = [
   {
@@ -62,11 +63,33 @@ const features = [
   }
 ];
 
-const carouselItems = ['Dashboard Screen', 'Transactions Screen', 'Reports Screen', 'Savings Screen', 'Debts & Loans Screen'];
+const screenshotItems = features.map(({ label }) => label);
 const whyItems = [
   { title: 'Simple', body: 'Designed to be easy for anyone to use.' },
   { title: 'Reliable', body: 'Works even when internet access is unavailable.' },
   { title: 'Built with Users', body: 'Improved continuously based on community feedback.' }
+];
+const roadmapItems = [
+  {
+    title: 'Cloud Sync & Backup',
+    description: 'Keep your transactions and account data available across devices with secure Supabase-backed sync.',
+    points: ['Cross-device sync', 'Automatic backups', 'Reliable restore flow']
+  },
+  {
+    title: 'Chatbot Transaction Logging',
+    description: 'Create entries by describing purchases in plain language, making logging feel effortless.',
+    points: ['Voice or text input', 'Smart categorization', 'Fast transaction entry']
+  },
+  {
+    title: 'WhatsApp Integration',
+    description: 'Capture expenses and transfers from WhatsApp conversations without leaving your workflow.',
+    points: ['Message-based logging', 'Quick reminders', 'Less manual entry']
+  },
+  {
+    title: 'App Lock / PIN',
+    description: 'Add an extra layer of protection so your financial data stays private on the device.',
+    points: ['Passcode or PIN', 'Biometric readiness', 'Secure app access']
+  }
 ];
 const faqs = [
   { q: 'What is MoniLog?', a: 'MoniLog is a modern personal finance tracker designed for fast, offline-first money management without requiring an account.' },
@@ -300,7 +323,7 @@ export default function Home() {
                 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
               />
               <Reveal as="p" delay={1} className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                MoniLog helps you track income, expenses, debts, loans, savings, and financial goals with ease. Built for simplicity, speed, and complete visibility over your finances.
+                MoniLog helps you track transactions, move money between accounts, manage multiple balances, and understand your finances with clear analytics. It is designed for simple, reliable, offline-first money management.
               </Reveal>
               <Reveal delay={2} className="flex flex-wrap gap-4">
                 <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
@@ -353,6 +376,7 @@ export default function Home() {
             items={features}
             renderCard={(item) => (
               <article className="h-full overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-900 p-8 shadow-soft transition hover:border-primary/50">
+                <MediaPlaceholder item={item} className="mb-6 h-48" />
                 <div className="inline-flex rounded-3xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
                   {item.label}
                 </div>
@@ -375,17 +399,15 @@ export default function Home() {
         <Slide id="screenshots" className="text-white">
           <div className="mb-10 text-center">
             <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">See MoniLog in Action</Reveal>
-            <RevealHeading text="See MoniLog in Action" className="mt-3 text-3xl font-semibold sm:text-4xl" />
+            <RevealHeading text="A Closer Look at the App" className="mt-3 text-3xl font-semibold sm:text-4xl" />
           </div>
           <HorizontalDeck
             slideId="screenshots"
             ariaLabel="App screenshots"
-            items={carouselItems}
+            items={screenshotItems}
             renderCard={(item) => (
               <div className="h-full rounded-[1.75rem] border border-white/10 bg-slate-900/90 p-6">
-                <div className="h-72 overflow-hidden rounded-3xl bg-slate-800">
-                  <Parallax strength={24} className="h-[130%] w-full bg-gradient-to-b from-slate-700 to-slate-900" />
-                </div>
+                <MediaPlaceholder item={{ title: item }} className="h-72" />
                 <p className="mt-5 text-lg font-semibold text-white">{item}</p>
               </div>
             )}
@@ -405,7 +427,40 @@ export default function Home() {
           </div>
         </Slide>
 
-        {/* Slide 5: Beta Program (folds in the "Currently in Beta" banner) */}
+        {/* Slide 5: Coming Soon */}
+        <Slide id="coming-soon">
+          <div className="mb-10 space-y-4 text-center">
+            <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Coming Soon</Reveal>
+            <RevealHeading text="What’s Next for MoniLog" className="text-3xl font-semibold text-white sm:text-4xl" />
+            <Reveal as="p" delay={1} className="mx-auto max-w-2xl text-base leading-8 text-slate-300">
+              These roadmap ideas are planned for future releases and will expand the experience beyond the essentials of Version 1.
+            </Reveal>
+          </div>
+          <HorizontalDeck
+            slideId="coming-soon"
+            ariaLabel="Upcoming MoniLog features"
+            items={roadmapItems}
+            renderCard={(item) => (
+              <article className="h-full overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-900 p-8 shadow-soft transition hover:border-primary/50">
+                <div className="inline-flex rounded-3xl bg-secondary/10 px-4 py-2 text-sm font-semibold text-secondary">
+                  Planned
+                </div>
+                <h3 className="mt-6 text-2xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-4 text-slate-300">{item.description}</p>
+                <ul className="mt-6 space-y-3 text-sm text-slate-300">
+                  {item.points.map((point) => (
+                    <li key={point} className="flex items-start gap-3">
+                      <span className="mt-1 h-2.5 w-2.5 rounded-full bg-secondary" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            )}
+          />
+        </Slide>
+
+        {/* Slide 6: Beta Program (folds in the "Currently in Beta" banner) */}
         <Slide id="beta-program">
           <div className="space-y-6">
             <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-soft sm:p-8">
@@ -515,6 +570,7 @@ export default function Home() {
                   <ul className="mt-4 space-y-3 text-slate-400">
                     <li><a href="#features" className="hover:text-primary">Features</a></li>
                     <li><a href="#screenshots" className="hover:text-primary">Screenshots</a></li>
+                    <li><a href="#coming-soon" className="hover:text-primary">Coming Soon</a></li>
                     <li><a href="#beta-program" className="hover:text-primary">Beta Program</a></li>
                   </ul>
                 </div>
