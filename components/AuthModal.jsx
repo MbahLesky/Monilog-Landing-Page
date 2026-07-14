@@ -47,6 +47,7 @@ export default function AuthModal() {
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [orgName, setOrgName] = useState('');
+  const [assignedCode, setAssignedCode] = useState(null); // The code assigned to this tester
   // 'idle' | 'submitting' | 'error' | 'signup-success' | 'reset-sent'
   //  | 'beta-full' | 'waitlist-sent'
   const [status, setStatus] = useState('idle');
@@ -66,6 +67,7 @@ export default function AuthModal() {
       setPassword('');
       setCode(urlCode || '');
       setOrgName('');
+      setAssignedCode(null);
       setStatus('idle');
       setMessage('');
     }
@@ -124,6 +126,7 @@ export default function AuthModal() {
   // Turns a register-tester result into the right UI state.
   const applyRegisterResult = (result) => {
     if (result.status === 'ok') {
+      setAssignedCode(result.code);
       finishAuth({ keepOpen: false });
       return;
     }
@@ -206,7 +209,11 @@ export default function AuthModal() {
 
     try {
       await signUp({ name: name.trim(), email: email.trim(), password });
-      const result = await registerTester(code);
+      const result = await registerTester(code, {
+        name: name.trim(),
+        email: email.trim(),
+        phone: ''
+      });
       if (result.status === 'ok') {
         await sendVerification().catch(() => {});
         finishAuth({ keepOpen: true });
@@ -226,7 +233,11 @@ export default function AuthModal() {
     setMessage('');
     try {
       await signInWithGoogle();
-      const result = await registerTester(code || urlCode);
+      const result = await registerTester(code || urlCode, {
+        name: '',
+        email: '',
+        phone: ''
+      });
       applyRegisterResult(result);
     } catch (error) {
       setStatus('error');
@@ -325,6 +336,13 @@ export default function AuthModal() {
           {`We've sent a verification link to ${email}. You can verify anytime — `}
           {gatedDownload ? 'your download is starting now.' : 'you are all set.'}
         </p>
+        {assignedCode && (
+          <div className="mx-auto w-full max-w-xs rounded-3xl border border-primary/30 bg-primary/5 p-4">
+            <p className="text-xs uppercase tracking-widest text-slate-400">Your tester code</p>
+            <p className="mt-2 text-2xl font-bold text-primary">{assignedCode.code}</p>
+            <p className="mt-2 text-xs text-slate-400">{assignedCode.organisation_name || 'General tester pool'}</p>
+          </div>
+        )}
         <button type="button" onClick={closeAuthModal} className={primaryButtonClass}>
           Done
         </button>
