@@ -33,8 +33,15 @@ function loadGsiScript() {
 }
 
 export default function GoogleOneTap() {
-  const { user, loading, signInWithGoogleCredential } = useAuth();
+  const { user, loading, urlCode, signInWithGoogleCredential, registerTester } = useAuth();
   const initializedRef = useRef(false);
+
+  // The One Tap callback is registered once but should always read the latest
+  // referral code, so keep it in a ref.
+  const urlCodeRef = useRef(urlCode);
+  useEffect(() => {
+    urlCodeRef.current = urlCode;
+  }, [urlCode]);
 
   useEffect(() => {
     if (!CLIENT_ID) return undefined; // One Tap not configured
@@ -60,6 +67,11 @@ export default function GoogleOneTap() {
             callback: async (response) => {
               try {
                 await signInWithGoogleCredential(response.credential);
+                // Register (or confirm) the tester. Returning testers pass
+                // through as 'already_registered'; a brand-new user registers as
+                // general, or attributed when a referral code rode in on the URL.
+                // 'full' / 'invalid_code' already signed the user back out.
+                await registerTester(urlCodeRef.current || null);
               } catch (error) {
                 console.error('Google One Tap sign-in failed', error);
               }
@@ -76,7 +88,7 @@ export default function GoogleOneTap() {
     return () => {
       cancelled = true;
     };
-  }, [user, loading, signInWithGoogleCredential]);
+  }, [user, loading, signInWithGoogleCredential, registerTester]);
 
   return null;
 }
