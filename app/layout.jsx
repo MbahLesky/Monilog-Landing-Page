@@ -2,6 +2,8 @@ import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
 import GoogleOneTap from '../components/GoogleOneTap';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
+import { initializeFirebaseAnalytics } from '../lib/firebase';
 
 export const metadata = {
   title: 'MoniLog | Personal Finance Beta',
@@ -20,12 +22,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <VercelAnalytics />
         <AuthProvider>
           {children}
           <AuthModal />
           <GoogleOneTap />
         </AuthProvider>
+        <FirebaseAnalyticsInit />
       </body>
     </html>
   );
+}
+
+function FirebaseAnalyticsInit() {
+  if (typeof window === 'undefined') return null;
+
+  initializeFirebaseAnalytics().catch(() => {});
+  return null;
 }
