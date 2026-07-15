@@ -13,7 +13,7 @@ import {
   GoogleAuthProvider,
   signOut as firebaseSignOut
 } from 'firebase/auth';
-import { getFirebaseAuth } from '../lib/firebase';
+import { getFirebaseAuth, trackFirebaseEvent } from '../lib/firebase';
 import { storeTester, getBetaCodeInfo } from '../lib/firestore-testers';
 
 const APK_DOWNLOAD_URL = '/downloads/monilog-v1_1-release.apk';
@@ -50,6 +50,7 @@ function triggerApkDownload() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  trackFirebaseEvent('download', { source: 'auth_modal' });
 }
 
 export function AuthProvider({ children }) {
@@ -115,9 +116,13 @@ export function AuthProvider({ children }) {
   );
 
   const signUp = useCallback(async ({ name, email, password }) => {
+    trackFirebaseEvent('sign_up_started', { method: 'email_password' });
+
     const auth = requireAuth();
     const { user: newUser } = await createUserWithEmailAndPassword(auth, email, password);
     if (name) await updateProfile(newUser, { displayName: name });
+
+    trackFirebaseEvent('sign_up_completed', { method: 'email_password' });
     return newUser;
   }, []);
 
@@ -133,12 +138,13 @@ export function AuthProvider({ children }) {
     []
   );
 
-  const signInWithGoogle = useCallback(
-    () => signInWithPopup(requireAuth(), new GoogleAuthProvider()),
-    []
-  );
+  const signInWithGoogle = useCallback(async () => {
+    trackFirebaseEvent('google_sign_in', { method: 'popup' });
+    return signInWithPopup(requireAuth(), new GoogleAuthProvider());
+  }, []);
 
-  const signInWithGoogleCredential = useCallback((idToken) => {
+  const signInWithGoogleCredential = useCallback(async (idToken) => {
+    trackFirebaseEvent('google_sign_in', { method: 'one_tap' });
     const credential = GoogleAuthProvider.credential(idToken);
     return signInWithCredential(requireAuth(), credential);
   }, []);
@@ -180,6 +186,10 @@ export function AuthProvider({ children }) {
         phone: phone || '',
         code: normalizedCode || ''
       });
+
+      if (normalizedCode) {
+        trackFirebaseEvent('beta_code_used', { code: normalizedCode });
+      }
     } catch (error) {
       console.error('Failed to store tester:', error);
       return { status: 'error', code: null };
