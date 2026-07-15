@@ -17,7 +17,7 @@ import Footer from './sections/Footer';
 
 // Data
 const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program'];
-const apkDownloadUrl = '/downloads/monilog-v1_1-release.apk';
+const apkDownloadUrl = '/downloads/Monilog-v1.2.0.apk';
 
 const features = [
   {
