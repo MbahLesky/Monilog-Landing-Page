@@ -76,7 +76,19 @@ const features = [
   }
 ];
 
-const screenshotItems = features.map(({ label }) => label);
+const screenshotItems = [
+  'Dashboard Screen',
+  'Transaction Entry Screen',
+  'Accounts Screen',
+  'Transfers Screen',
+  'Analytics Screen',
+  'Import / Export Screen',
+  'Authentication Screen',
+  'Currency Screen',
+  'Notifications Screen',
+  'Categories Screen',
+  'History Screen'
+];
 
 const whyItems = [
   { title: 'Simple', body: 'Designed to be easy for anyone to use.' },
