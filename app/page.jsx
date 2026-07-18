@@ -12,6 +12,7 @@ import ComingSoonSection from './sections/ComingSoonSection';
 import WhyMonilogSection from './sections/WhyMonilogSection';
 import BetaProgramSection from './sections/BetaProgramSection';
 import DownloadCTASection from './sections/DownloadCTASection';
+import FeedbackSection from './sections/FeedbackSection';
 import FAQSection from './sections/FAQSection';
 import Footer from './sections/Footer';
 
@@ -63,14 +64,32 @@ const features = [
     label: 'Onboarding Screen'
   },
   {
-    title: 'Settings & Customization',
-    description: 'Configure the app to match your preferences.',
-    points: ['Profile settings', 'Category management', 'Notification settings', 'Data management tools'],
-    label: 'Settings Screen'
+    title: 'Categories & Organization',
+    description: 'Sort every transaction into clear, custom categories.',
+    points: ['Custom categories', 'Category-based filtering', 'Spending breakdown by category', 'Icon & color tagging'],
+    label: 'Categories Screen'
+  },
+  {
+    title: 'Smart Notifications',
+    description: 'Stay on top of your finances with timely alerts.',
+    points: ['Balance alerts', 'Transaction reminders', 'Customizable notification preferences', 'Low balance warnings'],
+    label: 'Notifications Screen'
   }
 ];
 
-const screenshotItems = features.map(({ label }) => label);
+const screenshotItems = [
+  'Dashboard Screen',
+  'Transaction Entry Screen',
+  'Accounts Screen',
+  'Transfers Screen',
+  'Analytics Screen',
+  'Import / Export Screen',
+  'Authentication Screen',
+  'Currency Screen',
+  'Notifications Screen',
+  'Categories Screen',
+  'History Screen'
+];
 
 const whyItems = [
   { title: 'Simple', body: 'Designed to be easy for anyone to use.' },
@@ -98,16 +117,84 @@ const roadmapItems = [
     title: 'App Lock / PIN',
     description: 'Add an extra layer of protection so your financial data stays private on the device.',
     points: ['Passcode or PIN', 'Biometric readiness', 'Secure app access']
+  },
+  {
+    title: 'iOS Version',
+    description: 'Bring the full MoniLog experience to iPhone and iPad with a native iOS release.',
+    points: ['Native iOS app', 'Feature parity with Android', 'App Store release']
+  },
+  {
+    title: 'Advanced Analytics',
+    description: 'Dive deeper into spending patterns with richer charts and custom reports.',
+    points: ['Custom date ranges', 'Category trend charts', 'Exportable reports']
+  }
+];
+
+// TODO: replace with the real per-scenario Google Form links.
+const feedbackItems = [
+  {
+    title: 'Test Sign In & Authentication',
+    steps: [
+      'Create a new account with email and password, or sign in with Google.',
+      'Sign out, then sign back in with the same credentials.',
+      'Try the "forgot password" flow if you used email sign-in.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
+  },
+  {
+    title: 'Test Transactions & Transfers',
+    steps: [
+      'Add an income transaction and an expense transaction.',
+      'Edit one of the transactions you just created.',
+      'Transfer money between two accounts and check both balances update.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
+  },
+  {
+    title: 'Test Categories & Notifications',
+    steps: [
+      'Assign categories to a few existing transactions.',
+      'Filter your transaction list by category.',
+      'Open notification settings and toggle a preference on or off.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
+  },
+  {
+    title: 'Test Import & Export',
+    steps: [
+      'Export your transactions to a CSV file.',
+      'Make a small change to the exported file.',
+      'Re-import the file and confirm the data looks correct.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
   }
 ];
 
 const faqs = [
   { q: 'What is MoniLog?', a: 'MoniLog is a modern personal finance tracker designed for fast, offline-first money management without requiring an account.' },
   { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
-  { q: 'Will iOS be supported?', a: 'iOS support is under consideration as we prioritize a stable Android beta and strong cross-platform foundations.' },
+  { q: 'Will iOS be supported?', a: 'Yes, an iOS version is on our roadmap as we build on a stable Android beta and strong cross-platform foundations.' },
   { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
   { q: 'How can I submit feedback?', a: 'Feedback tools are coming soon. As the beta progresses, we will share dedicated forms for each test scenario.' }
 ];
+
+function UserAvatar({ user, initial, sizeClass }) {
+  if (user.photoURL) {
+    return (
+      <img
+        src={user.photoURL}
+        alt={user.displayName || 'Profile photo'}
+        referrerPolicy="no-referrer"
+        className={`${sizeClass} rounded-full object-cover`}
+      />
+    );
+  }
+  return (
+    <span className={`flex ${sizeClass} items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary font-semibold text-slate-950`}>
+      {initial}
+    </span>
+  );
+}
 
 function HeaderAuth({ variant = 'desktop', onNavigate }) {
   const { user, loading, openAuthModal, signOut } = useAuth();
@@ -157,9 +244,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
     return (
       <div className="rounded-3xl border border-slate-800 bg-slate-900 px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-slate-950">
-            {initial}
-          </span>
+          <UserAvatar user={user} initial={initial} sizeClass="h-9 w-9 text-sm" />
           <div className="min-w-0">
             <p className="truncate text-sm font-medium text-white">{displayName}</p>
             <p className="truncate text-xs text-slate-400">{user.email}</p>
@@ -185,9 +270,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
         aria-expanded={menuOpen}
         className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 py-1.5 pl-1.5 pr-4 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-semibold text-slate-950">
-          {initial}
-        </span>
+        <UserAvatar user={user} initial={initial} sizeClass="h-7 w-7 text-xs" />
         <span className="max-w-[9rem] truncate">{displayName}</span>
       </button>
       {menuOpen && (
@@ -261,6 +344,7 @@ function SiteHeader() {
           {mobileMenuOpen ? 'Close' : 'Menu'}
         </button>
       </div>
+      <ProgressBar />
       {mobileMenuOpen && (
         <div className="border-t border-slate-800 bg-slate-950 pb-6 md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 pt-6 sm:px-8">
@@ -296,7 +380,6 @@ function SiteHeader() {
 export default function Home() {
   return (
     <FullPageScrollProvider>
-      <ProgressBar />
       <SiteHeader />
 
       <ScrollViewport>
@@ -337,13 +420,15 @@ export default function Home() {
           <DownloadCTASection apkDownloadUrl={apkDownloadUrl} />
         </Slide>
 
-        {/* Tail: FAQ + Footer */}
+        {/* Tail: FAQ + Feedback (signed-in only) + Footer */}
         <div className="snap-tail bg-slate-950 text-slate-100">
           <section id="faq" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl">
               <FAQSection faqs={faqs} />
             </div>
           </section>
+
+          <FeedbackSection feedbackItems={feedbackItems} />
 
           <Footer />
         </div>
