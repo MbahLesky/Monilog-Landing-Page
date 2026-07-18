@@ -12,6 +12,7 @@ import ComingSoonSection from './sections/ComingSoonSection';
 import WhyMonilogSection from './sections/WhyMonilogSection';
 import BetaProgramSection from './sections/BetaProgramSection';
 import DownloadCTASection from './sections/DownloadCTASection';
+import FeedbackSection from './sections/FeedbackSection';
 import FAQSection from './sections/FAQSection';
 import Footer from './sections/Footer';
 
@@ -126,6 +127,46 @@ const roadmapItems = [
     title: 'Advanced Analytics',
     description: 'Dive deeper into spending patterns with richer charts and custom reports.',
     points: ['Custom date ranges', 'Category trend charts', 'Exportable reports']
+  }
+];
+
+// TODO: replace with the real per-scenario Google Form links.
+const feedbackItems = [
+  {
+    title: 'Test Sign In & Authentication',
+    steps: [
+      'Create a new account with email and password, or sign in with Google.',
+      'Sign out, then sign back in with the same credentials.',
+      'Try the "forgot password" flow if you used email sign-in.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
+  },
+  {
+    title: 'Test Transactions & Transfers',
+    steps: [
+      'Add an income transaction and an expense transaction.',
+      'Edit one of the transactions you just created.',
+      'Transfer money between two accounts and check both balances update.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
+  },
+  {
+    title: 'Test Categories & Notifications',
+    steps: [
+      'Assign categories to a few existing transactions.',
+      'Filter your transaction list by category.',
+      'Open notification settings and toggle a preference on or off.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
+  },
+  {
+    title: 'Test Import & Export',
+    steps: [
+      'Export your transactions to a CSV file.',
+      'Make a small change to the exported file.',
+      'Re-import the file and confirm the data looks correct.'
+    ],
+    formUrl: 'https://forms.gle/REPLACE_ME'
   }
 ];
 
@@ -365,13 +406,15 @@ export default function Home() {
           <DownloadCTASection apkDownloadUrl={apkDownloadUrl} />
         </Slide>
 
-        {/* Tail: FAQ + Footer */}
+        {/* Tail: FAQ + Feedback (signed-in only) + Footer */}
         <div className="snap-tail bg-slate-950 text-slate-100">
           <section id="faq" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl">
               <FAQSection faqs={faqs} />
             </div>
           </section>
+
+          <FeedbackSection feedbackItems={feedbackItems} />
 
           <Footer />
         </div>
