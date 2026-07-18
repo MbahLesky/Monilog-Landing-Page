@@ -1,6 +1,7 @@
 'use client';
 
 import { Reveal, RevealHeading } from '../../components/Reveal';
+import HorizontalDeck from '../../components/HorizontalDeck';
 import { useAuth } from '../../context/AuthContext';
 
 export default function FeedbackSection({ apkDownloadUrl, feedbackItems }) {
@@ -23,14 +24,12 @@ export default function FeedbackSection({ apkDownloadUrl, feedbackItems }) {
             Pick a scenario below, follow the steps in the app, then tell us how it went.
           </Reveal>
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          {feedbackItems.map((item, i) => (
-            <Reveal
-              key={item.title}
-              delay={i}
-              as="article"
-              className="flex h-full flex-col rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-8 shadow-soft"
-            >
+        <HorizontalDeck
+          slideId="feedback"
+          ariaLabel="Beta feedback scenarios"
+          items={feedbackItems}
+          renderCard={(item) => (
+            <article className="flex h-full flex-col rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-8 shadow-soft">
               <h3 className="text-xl font-semibold text-white">{item.title}</h3>
               <ol className="mt-4 flex-1 space-y-3 text-sm text-slate-300">
                 {item.steps.map((step, stepIndex) => (
@@ -50,9 +49,9 @@ export default function FeedbackSection({ apkDownloadUrl, feedbackItems }) {
               >
                 Submit Feedback
               </a>
-            </Reveal>
-          ))}
-        </div>
+            </article>
+          )}
+        />
       </div>
     );
   }
