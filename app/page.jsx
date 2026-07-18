@@ -178,6 +178,24 @@ const faqs = [
   { q: 'How can I submit feedback?', a: 'Feedback tools are coming soon. As the beta progresses, we will share dedicated forms for each test scenario.' }
 ];
 
+function UserAvatar({ user, initial, sizeClass }) {
+  if (user.photoURL) {
+    return (
+      <img
+        src={user.photoURL}
+        alt={user.displayName || 'Profile photo'}
+        referrerPolicy="no-referrer"
+        className={`${sizeClass} rounded-full object-cover`}
+      />
+    );
+  }
+  return (
+    <span className={`flex ${sizeClass} items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary font-semibold text-slate-950`}>
+      {initial}
+    </span>
+  );
+}
+
 function HeaderAuth({ variant = 'desktop', onNavigate }) {
   const { user, loading, openAuthModal, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -226,9 +244,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
     return (
       <div className="rounded-3xl border border-slate-800 bg-slate-900 px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-slate-950">
-            {initial}
-          </span>
+          <UserAvatar user={user} initial={initial} sizeClass="h-9 w-9 text-sm" />
           <div className="min-w-0">
             <p className="truncate text-sm font-medium text-white">{displayName}</p>
             <p className="truncate text-xs text-slate-400">{user.email}</p>
@@ -254,9 +270,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
         aria-expanded={menuOpen}
         className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 py-1.5 pl-1.5 pr-4 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-semibold text-slate-950">
-          {initial}
-        </span>
+        <UserAvatar user={user} initial={initial} sizeClass="h-7 w-7 text-xs" />
         <span className="max-w-[9rem] truncate">{displayName}</span>
       </button>
       {menuOpen && (
