@@ -116,13 +116,23 @@ const roadmapItems = [
     title: 'App Lock / PIN',
     description: 'Add an extra layer of protection so your financial data stays private on the device.',
     points: ['Passcode or PIN', 'Biometric readiness', 'Secure app access']
+  },
+  {
+    title: 'iOS Version',
+    description: 'Bring the full MoniLog experience to iPhone and iPad with a native iOS release.',
+    points: ['Native iOS app', 'Feature parity with Android', 'App Store release']
+  },
+  {
+    title: 'Advanced Analytics',
+    description: 'Dive deeper into spending patterns with richer charts and custom reports.',
+    points: ['Custom date ranges', 'Category trend charts', 'Exportable reports']
   }
 ];
 
 const faqs = [
   { q: 'What is MoniLog?', a: 'MoniLog is a modern personal finance tracker designed for fast, offline-first money management without requiring an account.' },
   { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
-  { q: 'Will iOS be supported?', a: 'iOS support is under consideration as we prioritize a stable Android beta and strong cross-platform foundations.' },
+  { q: 'Will iOS be supported?', a: 'Yes, an iOS version is on our roadmap as we build on a stable Android beta and strong cross-platform foundations.' },
   { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
   { q: 'How can I submit feedback?', a: 'Feedback tools are coming soon. As the beta progresses, we will share dedicated forms for each test scenario.' }
 ];
