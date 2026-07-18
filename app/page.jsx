@@ -11,13 +11,12 @@ import ScreenshotsSection from './sections/ScreenshotsSection';
 import ComingSoonSection from './sections/ComingSoonSection';
 import WhyMonilogSection from './sections/WhyMonilogSection';
 import BetaProgramSection from './sections/BetaProgramSection';
-import DownloadCTASection from './sections/DownloadCTASection';
 import FeedbackSection from './sections/FeedbackSection';
 import FAQSection from './sections/FAQSection';
 import Footer from './sections/Footer';
 
 // Data
-const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program'];
+const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/Monilog-v1.2.1.apk';
 
 const features = [
@@ -415,20 +414,18 @@ export default function Home() {
           <BetaProgramSection apkDownloadUrl={apkDownloadUrl} />
         </Slide>
 
-        {/* Slide 7: Download CTA */}
-        <Slide id="download">
-          <DownloadCTASection apkDownloadUrl={apkDownloadUrl} />
+        {/* Slide 7: Feedback / Download CTA — CTA to join beta when signed out, feedback prompts once signed in */}
+        <Slide id="feedback">
+          <FeedbackSection apkDownloadUrl={apkDownloadUrl} feedbackItems={feedbackItems} />
         </Slide>
 
-        {/* Tail: FAQ + Feedback (signed-in only) + Footer */}
+        {/* Tail: FAQ + Footer */}
         <div className="snap-tail bg-slate-950 text-slate-100">
           <section id="faq" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl">
               <FAQSection faqs={faqs} />
             </div>
           </section>
-
-          <FeedbackSection feedbackItems={feedbackItems} />
 
           <Footer />
         </div>
