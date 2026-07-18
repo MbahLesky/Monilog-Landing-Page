@@ -20,7 +20,9 @@ body {
   background: radial-gradient(circle at top left, rgba(8, 210, 181, 0.14), transparent 28%), radial-gradient(circle at bottom right, rgba(8, 134, 127, 0.22), transparent 26%), #020617;
 }
 
-/* Full-page snap container (desktop). */
+/* Full-page snap container: each slide snaps to the top on enter, then scrolls
+   normally through any overflow before snapping to the next slide. Same
+   behavior on desktop and mobile. */
 .snap-container {
   height: 100vh;
   height: 100dvh;
@@ -41,13 +43,6 @@ body {
 /* Tail region snaps only at its top; content inside scrolls freely. */
 .snap-tail {
   scroll-snap-align: start;
-}
-
-/* Mobile / coarse pointer: smooth normal scroll, no snapping. */
-@media (max-width: 767px), (pointer: coarse) {
-  .snap-container {
-    scroll-snap-type: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
