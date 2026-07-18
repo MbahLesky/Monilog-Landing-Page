@@ -63,10 +63,16 @@ const features = [
     label: 'Onboarding Screen'
   },
   {
-    title: 'Settings & Customization',
-    description: 'Configure the app to match your preferences.',
-    points: ['Profile settings', 'Category management', 'Notification settings', 'Data management tools'],
-    label: 'Settings Screen'
+    title: 'Categories & Organization',
+    description: 'Sort every transaction into clear, custom categories.',
+    points: ['Custom categories', 'Category-based filtering', 'Spending breakdown by category', 'Icon & color tagging'],
+    label: 'Categories Screen'
+  },
+  {
+    title: 'Smart Notifications',
+    description: 'Stay on top of your finances with timely alerts.',
+    points: ['Balance alerts', 'Transaction reminders', 'Customizable notification preferences', 'Low balance warnings'],
+    label: 'Notifications Screen'
   }
 ];
 
