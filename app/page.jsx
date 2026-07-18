@@ -289,6 +289,7 @@ function SiteHeader() {
           {mobileMenuOpen ? 'Close' : 'Menu'}
         </button>
       </div>
+      <ProgressBar />
       {mobileMenuOpen && (
         <div className="border-t border-slate-800 bg-slate-950 pb-6 md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 pt-6 sm:px-8">
@@ -324,7 +325,6 @@ function SiteHeader() {
 export default function Home() {
   return (
     <FullPageScrollProvider>
-      <ProgressBar />
       <SiteHeader />
 
       <ScrollViewport>
