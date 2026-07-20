@@ -12,7 +12,6 @@ import ScreenshotsSection from './sections/ScreenshotsSection';
 import ComingSoonSection from './sections/ComingSoonSection';
 import WhyMonilogSection from './sections/WhyMonilogSection';
 import BetaProgramSection from './sections/BetaProgramSection';
-import DownloadCTASection from './sections/DownloadCTASection';
 import FeedbackSection from './sections/FeedbackSection';
 import FAQSection from './sections/FAQSection';
 import Footer from './sections/Footer';
@@ -20,10 +19,6 @@ import Footer from './sections/Footer';
 // Data
 const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/Monilog-v1.2.1.apk';
-
-// Placeholder until the per-flow feedback forms go live. Replace each `formUrl`
-// below with its real form link — the cards need no other change.
-const FEEDBACK_FORM_URL = '#feedback';
 
 const features = [
   {
@@ -69,15 +64,15 @@ const features = [
     label: 'Onboarding Screen'
   },
   {
-    title: 'Category Management',
-    description: 'Organize transactions the way you think.',
-    points: ['Custom categories', 'Income & expense grouping', 'Cleaner reports', 'Faster logging'],
+    title: 'Categories & Organization',
+    description: 'Sort every transaction into clear, custom categories.',
+    points: ['Custom categories', 'Category-based filtering', 'Spending breakdown by category', 'Icon & color tagging'],
     label: 'Categories Screen'
   },
   {
-    title: 'Notifications',
-    description: 'Stay on top of your money.',
-    points: ['Activity reminders', 'Custom alert preferences', 'Timely nudges', 'Quiet by default'],
+    title: 'Smart Notifications',
+    description: 'Stay on top of your finances with timely alerts.',
+    points: ['Balance alerts', 'Transaction reminders', 'Customizable notification preferences', 'Low balance warnings'],
     label: 'Notifications Screen'
   }
 ];
@@ -124,8 +119,22 @@ const roadmapItems = [
     title: 'App Lock / PIN',
     description: 'Add an extra layer of protection so your financial data stays private on the device.',
     points: ['Passcode or PIN', 'Biometric readiness', 'Secure app access']
+  },
+  {
+    title: 'iOS Version',
+    description: 'Bring the full MoniLog experience to iPhone and iPad with a native iOS release.',
+    points: ['Native iOS app', 'Feature parity with Android', 'App Store release']
+  },
+  {
+    title: 'Advanced Analytics',
+    description: 'Dive deeper into spending patterns with richer charts and custom reports.',
+    points: ['Custom date ranges', 'Category trend charts', 'Exportable reports']
   }
 ];
+
+// Placeholder until the per-flow feedback forms go live. Replace each `formUrl`
+// below with its real form link — the cards need no other change.
+const FEEDBACK_FORM_URL = 'https://forms.gle/REPLACE_ME';
 
 // Beta test flows from the Beta Testing Guide. Testers work through them in
 // order — flows 1 and 2 set up the app state every later flow depends on.
@@ -239,10 +248,28 @@ const testFlows = [
 const faqs = [
   { q: 'What is MoniLog?', a: 'MoniLog is a modern personal finance tracker designed for fast, offline-first money management without requiring an account.' },
   { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
-  { q: 'Will iOS be supported?', a: 'iOS support is under consideration as we prioritize a stable Android beta and strong cross-platform foundations.' },
+  { q: 'Will iOS be supported?', a: 'Yes, an iOS version is on our roadmap as we build on a stable Android beta and strong cross-platform foundations.' },
   { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
-  { q: 'How can I submit feedback?', a: 'Head to the Feedback section above. Each of the eight test flows has its own form — complete the steps, attach the required screenshots, and submit.' }
+  { q: 'How can I submit feedback?', a: 'Sign in and open the Feedback section. Each of the eight test flows has its own form — complete the steps, attach the required screenshots, and submit.' }
 ];
+
+function UserAvatar({ user, initial, sizeClass }) {
+  if (user.photoURL) {
+    return (
+      <img
+        src={user.photoURL}
+        alt={user.displayName || 'Profile photo'}
+        referrerPolicy="no-referrer"
+        className={`${sizeClass} rounded-full object-cover`}
+      />
+    );
+  }
+  return (
+    <span className={`flex ${sizeClass} items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary font-semibold text-slate-950`}>
+      {initial}
+    </span>
+  );
+}
 
 function HeaderAuth({ variant = 'desktop', onNavigate }) {
   const { user, loading, openAuthModal, signOut } = useAuth();
@@ -292,9 +319,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
     return (
       <div className="rounded-3xl border border-slate-800 bg-slate-900 px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-sm font-semibold text-slate-950">
-            {initial}
-          </span>
+          <UserAvatar user={user} initial={initial} sizeClass="h-9 w-9 text-sm" />
           <div className="min-w-0">
             <p className="truncate text-sm font-medium text-white">{displayName}</p>
             <p className="truncate text-xs text-slate-400">{user.email}</p>
@@ -320,9 +345,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
         aria-expanded={menuOpen}
         className="flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900 py-1.5 pl-1.5 pr-4 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-semibold text-slate-950">
-          {initial}
-        </span>
+        <UserAvatar user={user} initial={initial} sizeClass="h-7 w-7 text-xs" />
         <span className="max-w-[9rem] truncate">{displayName}</span>
       </button>
       {menuOpen && (
@@ -401,6 +424,7 @@ function SiteHeader() {
           {mobileMenuOpen ? 'Close' : 'Menu'}
         </button>
       </div>
+      <ProgressBar />
       {mobileMenuOpen && (
         <div className="border-t border-slate-800 bg-slate-950 pb-6 md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 pt-6 sm:px-8">
@@ -439,7 +463,6 @@ function SiteHeader() {
 export default function Home() {
   return (
     <FullPageScrollProvider>
-      <ProgressBar />
       <SiteHeader />
 
       <ScrollViewport>
@@ -475,19 +498,13 @@ export default function Home() {
           <BetaProgramSection />
         </Slide>
 
-        {/* Slide 7: Download CTA */}
-        <Slide id="download">
-          <DownloadCTASection apkDownloadUrl={apkDownloadUrl} />
+        {/* Slide 7: Feedback / Download CTA — CTA to join beta when signed out, test flows once signed in */}
+        <Slide id="feedback">
+          <FeedbackSection apkDownloadUrl={apkDownloadUrl} testFlows={testFlows} />
         </Slide>
 
-        {/* Tail: Feedback + FAQ + Footer */}
+        {/* Tail: FAQ + Footer */}
         <div className="snap-tail bg-slate-950 text-slate-100">
-          <section id="feedback" className="px-6 py-24 sm:px-8 lg:px-10">
-            <div className="mx-auto max-w-7xl">
-              <FeedbackSection testFlows={testFlows} />
-            </div>
-          </section>
-
           <section id="faq" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl">
               <FAQSection faqs={faqs} />
