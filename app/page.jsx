@@ -5,6 +5,7 @@ import { FullPageScrollProvider, ScrollViewport, useFullPageScroll } from '../co
 import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 import { useAuth } from '../context/AuthContext';
+import { trackFirebaseEvent } from '../lib/firebase';
 import HeroSection from './sections/HeroSection';
 import FeaturesSection from './sections/FeaturesSection';
 import ScreenshotsSection from './sections/ScreenshotsSection';
@@ -12,12 +13,17 @@ import ComingSoonSection from './sections/ComingSoonSection';
 import WhyMonilogSection from './sections/WhyMonilogSection';
 import BetaProgramSection from './sections/BetaProgramSection';
 import DownloadCTASection from './sections/DownloadCTASection';
+import FeedbackSection from './sections/FeedbackSection';
 import FAQSection from './sections/FAQSection';
 import Footer from './sections/Footer';
 
 // Data
-const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program'];
+const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program', 'Feedback'];
 const apkDownloadUrl = '/downloads/Monilog-v1.2.1.apk';
+
+// Placeholder until the per-flow feedback forms go live. Replace each `formUrl`
+// below with its real form link — the cards need no other change.
+const FEEDBACK_FORM_URL = '#feedback';
 
 const features = [
   {
@@ -63,14 +69,34 @@ const features = [
     label: 'Onboarding Screen'
   },
   {
-    title: 'Settings & Customization',
-    description: 'Configure the app to match your preferences.',
-    points: ['Profile settings', 'Category management', 'Notification settings', 'Data management tools'],
-    label: 'Settings Screen'
+    title: 'Category Management',
+    description: 'Organize transactions the way you think.',
+    points: ['Custom categories', 'Income & expense grouping', 'Cleaner reports', 'Faster logging'],
+    label: 'Categories Screen'
+  },
+  {
+    title: 'Notifications',
+    description: 'Stay on top of your money.',
+    points: ['Activity reminders', 'Custom alert preferences', 'Timely nudges', 'Quiet by default'],
+    label: 'Notifications Screen'
   }
 ];
 
-const screenshotItems = features.map(({ label }) => label);
+// App screenshots showcased in the "A Closer Look" gallery.
+const screenshotItems = [
+  { title: 'Dashboard Overview', gif: '/screenshots/dashboard.webp' },
+  { title: 'Add Transaction', gif: '/screenshots/add_transaction.webp' },
+  { title: 'Transaction History', gif: '/screenshots/transaction_history.webp' },
+  { title: 'Account Management', gif: '/screenshots/accounts.webp' },
+  { title: 'Money Transfers', gif: '/screenshots/transfer.webp' },
+  { title: 'Analytics & Insights', gif: '/screenshots/analytics.webp' },
+  { title: 'Category Management', gif: '/screenshots/category.webp' },
+  { title: 'Import & Export', gif: '/screenshots/export_import.webp' },
+  { title: 'Notifications', gif: '/screenshots/notifications.webp' },
+  { title: 'Personalized Onboarding', gif: '/screenshots/account_setup.webp' },
+  { title: 'Currency Selection', gif: '/screenshots/currency.webp' },
+  { title: 'Secure Authentication', gif: '/screenshots/authenticate.webp' }
+];
 
 const whyItems = [
   { title: 'Simple', body: 'Designed to be easy for anyone to use.' },
@@ -101,12 +127,121 @@ const roadmapItems = [
   }
 ];
 
+// Beta test flows from the Beta Testing Guide. Testers work through them in
+// order — flows 1 and 2 set up the app state every later flow depends on.
+const testFlows = [
+  {
+    id: 1,
+    title: 'App Installation',
+    objective: 'Accept the invite, install MoniLog, and confirm it launches.',
+    points: [
+      'Accept the Firebase App Distribution invite',
+      'Download from the Firebase email link',
+      'Allow unknown sources on Android if prompted',
+      'Launch the app to the welcome screen'
+    ],
+    screenshots: 1,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 2,
+    title: 'Onboarding & Tutorials',
+    objective: 'Complete first-time setup and explore the in-app tutorials.',
+    points: [
+      'Sign up with email or Google',
+      'Set display name, language, and currency',
+      'Add starting accounts and opening balances',
+      'Enable the daily reminder, then run two tutorials'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 3,
+    title: 'Sign Out & Sign In',
+    objective: 'Verify the authentication flow and password recovery.',
+    points: [
+      'Sign out from Settings or your profile',
+      'Sign back in with email or Google',
+      'Run the Forgot Password flow',
+      'Confirm the reset email arrives'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 4,
+    title: 'Transactions',
+    objective: 'Add, edit, and delete income and expense entries.',
+    points: [
+      'Add an income transaction for today',
+      'Add an expense transaction for today',
+      'Edit a detail on one transaction',
+      'Delete the other and check the balance updates'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 5,
+    title: 'Accounts, Transfers & Currency',
+    objective: 'Manage accounts, transfer with a fee, and switch currency.',
+    points: [
+      'Update an existing account balance',
+      'Add a new account and delete another',
+      'Transfer between accounts including a fee',
+      'Change the currency and confirm it applies everywhere'
+    ],
+    screenshots: 3,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 6,
+    title: 'Categories & Analytics',
+    objective: 'Create and manage categories, then review the analytics screen.',
+    points: [
+      'Add an income category and an expense category',
+      'Edit an existing default category',
+      'Reassign a past transaction to a new category',
+      'Review the category and per-account breakdown'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 7,
+    title: 'Notifications, Theme & Language',
+    objective: 'Check reminders, theme switching, and language switching.',
+    points: [
+      'Confirm the daily reminder is enabled',
+      'Find the notification in your notification bar',
+      'Switch between Light and Dark themes',
+      'Switch between English and French'
+    ],
+    screenshots: 3,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 8,
+    title: 'Export, Import, Backup & Restore',
+    objective: 'Test the full data lifecycle end to end.',
+    points: [
+      'Export your data as CSV',
+      'Clear local data, then import the CSV back',
+      'Create a local JSON backup',
+      'Clear again and restore from the backup'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  }
+];
+
 const faqs = [
   { q: 'What is MoniLog?', a: 'MoniLog is a modern personal finance tracker designed for fast, offline-first money management without requiring an account.' },
   { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
   { q: 'Will iOS be supported?', a: 'iOS support is under consideration as we prioritize a stable Android beta and strong cross-platform foundations.' },
   { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
-  { q: 'How can I submit feedback?', a: 'Feedback tools are coming soon. As the beta progresses, we will share dedicated forms for each test scenario.' }
+  { q: 'How can I submit feedback?', a: 'Head to the Feedback section above. Each of the eight test flows has its own form — complete the steps, attach the required screenshots, and submit.' }
 ];
 
 function HeaderAuth({ variant = 'desktop', onNavigate }) {
@@ -250,7 +385,12 @@ function SiteHeader() {
         </nav>
         <div className="hidden items-center gap-3 md:flex">
           <HeaderAuth />
-          <a href={apkDownloadUrl} download className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
+          <a
+            href={apkDownloadUrl}
+            download
+            onClick={() => trackFirebaseEvent('download_click', { location: 'header' })}
+            className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95"
+          >
             Download Beta
           </a>
         </div>
@@ -280,7 +420,10 @@ function SiteHeader() {
             <a
               href={apkDownloadUrl}
               download
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                trackFirebaseEvent('download_click', { location: 'header_mobile' });
+                setMobileMenuOpen(false);
+              }}
               className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
             >
               Download Beta
@@ -304,7 +447,7 @@ export default function Home() {
         <Slide id="hero" className="pt-28">
           <div className="pointer-events-none absolute left-0 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
           <div className="pointer-events-none absolute right-0 top-24 h-72 w-72 translate-x-1/3 rounded-full bg-secondary/15 blur-3xl" />
-          <HeroSection />
+          <HeroSection apkDownloadUrl={apkDownloadUrl} />
         </Slide>
 
         {/* Slide 2: Features */}
@@ -329,7 +472,7 @@ export default function Home() {
 
         {/* Slide 6: Beta Program */}
         <Slide id="beta-program">
-          <BetaProgramSection apkDownloadUrl={apkDownloadUrl} />
+          <BetaProgramSection />
         </Slide>
 
         {/* Slide 7: Download CTA */}
@@ -337,8 +480,14 @@ export default function Home() {
           <DownloadCTASection apkDownloadUrl={apkDownloadUrl} />
         </Slide>
 
-        {/* Tail: FAQ + Footer */}
+        {/* Tail: Feedback + FAQ + Footer */}
         <div className="snap-tail bg-slate-950 text-slate-100">
+          <section id="feedback" className="px-6 py-24 sm:px-8 lg:px-10">
+            <div className="mx-auto max-w-7xl">
+              <FeedbackSection testFlows={testFlows} />
+            </div>
+          </section>
+
           <section id="faq" className="px-6 py-24 sm:px-8 lg:px-10">
             <div className="mx-auto max-w-7xl">
               <FAQSection faqs={faqs} />

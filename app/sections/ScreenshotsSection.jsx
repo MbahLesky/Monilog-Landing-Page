@@ -16,9 +16,9 @@ export default function ScreenshotsSection({ screenshotItems }) {
         ariaLabel="App screenshots"
         items={screenshotItems}
         renderCard={(item) => (
-          <div className="h-full rounded-[1.75rem] border border-white/10 bg-slate-900/90 p-6">
-            <MediaPlaceholder item={{ title: item }} className="h-72" />
-            <p className="mt-5 text-lg font-semibold text-white">{item}</p>
+          <div className="rounded-[1.75rem] border border-white/10 bg-slate-900/90 p-6">
+            <MediaPlaceholder item={item} className="h-[460px]" />
+            <p className="mt-5 text-lg font-semibold text-white">{item.title}</p>
           </div>
         )}
       />

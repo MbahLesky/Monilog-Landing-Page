@@ -2,12 +2,13 @@
 
 import { Reveal, RevealHeading } from '../../components/Reveal';
 import { useAuth } from '../../context/AuthContext';
+import { trackFirebaseEvent } from '../../lib/firebase';
 
 export default function DownloadCTASection({ apkDownloadUrl }) {
-  const { openAuthModal } = useAuth();
+  const { user, openAuthModal } = useAuth();
 
   const onGatedDownload = (event) => {
-    const { user } = useAuth();
+    trackFirebaseEvent('download_click', { location: 'download_cta' });
     if (!user) {
       event.preventDefault();
       openAuthModal({ mode: 'signup', intent: 'download' });

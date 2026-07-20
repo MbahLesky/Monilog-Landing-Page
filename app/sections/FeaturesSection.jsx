@@ -2,7 +2,6 @@
 
 import { Reveal, RevealHeading } from '../../components/Reveal';
 import HorizontalDeck from '../../components/HorizontalDeck';
-import MediaPlaceholder from '../../components/MediaPlaceholder';
 
 export default function FeaturesSection({ features }) {
   return (
@@ -20,7 +19,6 @@ export default function FeaturesSection({ features }) {
         items={features}
         renderCard={(item) => (
           <article className="h-full overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-900 p-8 shadow-soft transition hover:border-primary/50">
-            <MediaPlaceholder item={item} className="mb-6 h-48" />
             <div className="inline-flex rounded-3xl bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
               {item.label}
             </div>
