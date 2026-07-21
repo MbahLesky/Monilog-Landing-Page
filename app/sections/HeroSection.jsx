@@ -4,16 +4,10 @@ import { Reveal, RevealHeading } from '../../components/Reveal';
 import Parallax from '../../components/Parallax';
 import { useAuth } from '../../context/AuthContext';
 
-export default function HeroSection({ onDownload }) {
-  const { openAuthModal } = useAuth();
+export default function HeroSection({ apkDownloadUrl }) {
+  const { requestDownload } = useAuth();
 
-  const onGatedDownload = (event) => {
-    const { user } = useAuth();
-    if (!user) {
-      event.preventDefault();
-      openAuthModal({ mode: 'signup', intent: 'download' });
-    }
-  };
+  const onGatedDownload = (event) => requestDownload(event, { location: 'hero' });
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -30,7 +24,7 @@ export default function HeroSection({ onDownload }) {
           MoniLog helps you track transactions, move money between accounts, manage multiple balances, and understand your finances with clear analytics. It is designed for simple, reliable, offline-first money management.
         </Reveal>
         <Reveal delay={2} className="flex flex-wrap gap-4">
-          <a href="/downloads/Monilog-v1.2.1.apk" download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
+          <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
             Download Beta
           </a>
           <a href="#features" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800">
@@ -50,14 +44,14 @@ export default function HeroSection({ onDownload }) {
         <div className="absolute -left-10 top-12 h-28 w-28 rounded-3xl bg-primary/15 blur-2xl" />
         <div className="absolute right-8 top-[-18px] h-24 w-24 rounded-3xl bg-secondary/20 blur-2xl" />
         <div className="relative overflow-hidden rounded-[2rem] border border-slate-800/80 bg-slate-900/90 p-5 shadow-soft">
-          <div className="h-[520px] rounded-[1.75rem] bg-slate-950/80 p-6 shadow-inner sm:h-[560px]">
-            <div className="h-full rounded-[1.5rem] border border-slate-800/80 bg-slate-900 p-6 shadow-lg">
-              <div className="flex items-center justify-between rounded-3xl bg-slate-950/90 px-4 py-3 text-white shadow-sm">
-                <span className="text-sm font-semibold">MoniLog</span>
-                <span className="rounded-full bg-gradient-to-r from-primary to-secondary px-3 py-1 text-xs font-semibold text-slate-950">Beta</span>
-              </div>
-              <div className="mt-8 h-[380px] rounded-[1.5rem] bg-slate-800 shadow-inner" />
-            </div>
+          <div className="h-[520px] overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-950/80 shadow-inner sm:h-[560px]">
+            {/* Negative margin is width-relative, so it always trims the same
+                ~48px of the source: the phone status bar. */}
+            <img
+              src="/screenshots/dashboard_vid.webp"
+              alt="MoniLog dashboard preview"
+              className="-mt-[20px] h-full w-full object-cover object-top"
+            />
           </div>
         </div>
         <div className="pointer-events-none absolute bottom-4 left-1/2 h-20 w-20 -translate-x-1/2 rounded-full bg-primary/15 blur-2xl" />

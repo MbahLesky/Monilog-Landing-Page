@@ -1,19 +1,8 @@
 'use client';
 
 import { Reveal, RevealHeading } from '../../components/Reveal';
-import { useAuth } from '../../context/AuthContext';
 
-export default function BetaProgramSection({ apkDownloadUrl, onDownload }) {
-  const { openAuthModal } = useAuth();
-
-  const onGatedDownload = (event) => {
-    const { user } = useAuth();
-    if (!user) {
-      event.preventDefault();
-      openAuthModal({ mode: 'signup', intent: 'download' });
-    }
-  };
-
+export default function BetaProgramSection() {
   return (
     <div className="space-y-6">
       <div className="rounded-[1.75rem] border border-slate-800/80 bg-slate-900/95 p-6 shadow-soft sm:p-8">

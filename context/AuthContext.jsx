@@ -14,9 +14,10 @@ import {
   signOut as firebaseSignOut
 } from 'firebase/auth';
 import { getFirebaseAuth, trackFirebaseEvent } from '../lib/firebase';
-import { storeTester, getBetaCodeInfo } from '../lib/firestore-testers';
+import { storeTester, getBetaCodeInfo, getTester, recordAgreementAcceptance } from '../lib/firestore-testers';
+import { AGREEMENT_VERSION } from '../lib/betaAgreement';
 
-const APK_DOWNLOAD_URL = '/downloads/monilog-v1_1-release.apk';
+const APK_DOWNLOAD_URL = '/downloads/Monilog-v1.2.1.apk';
 const BETA_CODE_STORAGE_KEY = 'monilog:betaCode';
 
 const AuthContext = createContext(null);
@@ -43,14 +44,29 @@ function normalizeCode(code) {
   return typeof code === 'string' && code.trim() ? code.trim().toUpperCase() : null;
 }
 
-function triggerApkDownload() {
+// Best-effort read of the signed-in tester's acceptance. Returns false when the
+// doc is missing or unreadable — callers treat that as "needs to sign", which is
+// the safe direction: re-accepting is idempotent.
+async function hasAcceptedAgreement() {
+  const auth = getFirebaseAuth();
+  const current = auth?.currentUser;
+  if (!current) return false;
+  try {
+    const tester = await getTester(current.uid);
+    return tester?.agreement?.version === AGREEMENT_VERSION;
+  } catch {
+    return false;
+  }
+}
+
+function triggerApkDownload(source) {
   const link = document.createElement('a');
   link.href = APK_DOWNLOAD_URL;
   link.download = '';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  trackFirebaseEvent('download', { source: 'auth_modal' });
+  trackFirebaseEvent('download', { source });
 }
 
 export function AuthProvider({ children }) {
@@ -60,6 +76,17 @@ export function AuthProvider({ children }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState('signin');
   const [authIntent, setAuthIntent] = useState(null);
+
+  // Beta agreement gate: 'unknown' until the tester doc has been read, then
+  // 'pending' | 'accepted'. Only 'pending' blocks a download — 'unknown' means
+  // we could not read the doc, and an outage must not lock testers out.
+  const [agreementStatus, setAgreementStatus] = useState('unknown');
+  const [isAgreementOpen, setIsAgreementOpen] = useState(false);
+  // Set when the agreement interrupted a download, so accepting resumes it.
+  const [downloadAfterAgreement, setDownloadAfterAgreement] = useState(false);
+  // Queues the agreement until the auth modal is out of the way (a fresh sign-up
+  // keeps that modal open to show the "verify your email" note).
+  const [agreementPromptPending, setAgreementPromptPending] = useState(false);
 
   // A referral code carried in on the URL (e.g. /?code=LEADERS). Seeds the code
   // field and lets One Tap auto-attribute. Persisted for the session so it
@@ -79,6 +106,31 @@ export function AuthProvider({ children }) {
     });
     return unsubscribe;
   }, []);
+
+  // Resolve whether the signed-in tester has accepted the current agreement.
+  // A read failure leaves the status 'unknown', which fails open on download —
+  // we never want a Firestore outage to block testers from the APK.
+  useEffect(() => {
+    if (!user) {
+      setAgreementStatus('unknown');
+      return undefined;
+    }
+
+    let cancelled = false;
+    getTester(user.uid)
+      .then((tester) => {
+        if (cancelled) return;
+        const accepted = tester?.agreement?.version === AGREEMENT_VERSION;
+        setAgreementStatus(accepted ? 'accepted' : 'pending');
+      })
+      .catch(() => {
+        if (!cancelled) setAgreementStatus('unknown');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   // Capture a referral code from the URL / session on first load.
   useEffect(() => {
@@ -103,14 +155,98 @@ export function AuthProvider({ children }) {
     setAuthIntent(null);
   }, []);
 
+  const openAgreement = useCallback(({ thenDownload = false } = {}) => {
+    setDownloadAfterAgreement(thenDownload);
+    setIsAgreementOpen(true);
+    trackFirebaseEvent('agreement_shown', { version: AGREEMENT_VERSION });
+  }, []);
+
+  // Present a queued agreement only once the auth modal has closed, so the two
+  // dialogs never stack on top of each other.
+  useEffect(() => {
+    if (!agreementPromptPending || isAuthModalOpen) return;
+    setAgreementPromptPending(false);
+    setIsAgreementOpen(true);
+    trackFirebaseEvent('agreement_shown', { version: AGREEMENT_VERSION });
+  }, [agreementPromptPending, isAuthModalOpen]);
+
+  // Closing without accepting leaves the gate in place — the tester is simply
+  // re-prompted the next time they try to download.
+  const closeAgreement = useCallback(() => {
+    setIsAgreementOpen(false);
+    setDownloadAfterAgreement(false);
+  }, []);
+
+  // Records acceptance, then resumes a download the agreement interrupted. The
+  // Firestore write is best-effort: a failure must not strand a tester who has
+  // already ticked the box, so the session proceeds either way.
+  const acceptAgreement = useCallback(async () => {
+    const auth = getFirebaseAuth();
+    const current = auth?.currentUser;
+    if (current) {
+      try {
+        await recordAgreementAcceptance(current.uid, {
+          version: AGREEMENT_VERSION,
+          name: current.displayName || ''
+        });
+      } catch (error) {
+        console.error('Failed to record agreement acceptance:', error);
+      }
+    }
+
+    trackFirebaseEvent('agreement_accepted', { version: AGREEMENT_VERSION });
+    setAgreementStatus('accepted');
+    setIsAgreementOpen(false);
+    if (downloadAfterAgreement) {
+      setDownloadAfterAgreement(false);
+      triggerApkDownload('agreement');
+    }
+  }, [downloadAfterAgreement]);
+
+  // Single gate every download button routes through: track the click, then send
+  // the tester wherever they still need to go — sign up, sign the agreement, or
+  // straight to the APK.
+  const requestDownload = useCallback(
+    (event, { location = 'unknown' } = {}) => {
+      trackFirebaseEvent('download_click', { location });
+
+      if (!user) {
+        event?.preventDefault();
+        openAuthModal({ mode: 'signup', intent: 'download' });
+        return;
+      }
+      if (agreementStatus === 'pending') {
+        event?.preventDefault();
+        openAgreement({ thenDownload: true });
+      }
+      // 'accepted' (and 'unknown', which fails open) let the anchor download.
+    },
+    [user, agreementStatus, openAuthModal, openAgreement]
+  );
+
   // Called by the modal after a successful auth action. Resolves any pending
   // intent (e.g. the download the user was gated on) and optionally keeps the
   // modal open — sign-up keeps it open to show the "verify your email" note.
+  // A download intent is handed to the agreement gate rather than fired here,
+  // so nobody reaches the APK before signing.
   const finishAuth = useCallback(
-    ({ keepOpen = false } = {}) => {
-      if (authIntent === 'download') triggerApkDownload();
+    async ({ keepOpen = false } = {}) => {
+      const wantsDownload = authIntent === 'download';
       setAuthIntent(null);
       if (!keepOpen) setIsAuthModalOpen(false);
+
+      // Read acceptance fresh rather than trusting `agreementStatus`, which may
+      // still be resolving for the user who just signed in. An unreadable doc
+      // (new tester, or Firestore down) prompts — accepting again is harmless.
+      const accepted = await hasAcceptedAgreement();
+      setAgreementStatus(accepted ? 'accepted' : 'pending');
+
+      if (accepted) {
+        if (wantsDownload) triggerApkDownload('auth_modal');
+        return;
+      }
+      setDownloadAfterAgreement(wantsDownload);
+      setAgreementPromptPending(true);
     },
     [authIntent]
   );
@@ -224,6 +360,12 @@ export function AuthProvider({ children }) {
     authModalMode,
     authIntent,
     urlCode,
+    agreementStatus,
+    isAgreementOpen,
+    openAgreement,
+    closeAgreement,
+    acceptAgreement,
+    requestDownload,
     openAuthModal,
     closeAuthModal,
     finishAuth,

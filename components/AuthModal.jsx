@@ -333,8 +333,7 @@ export default function AuthModal() {
           Account created
         </h2>
         <p className="text-sm leading-7 text-slate-300">
-          {`We've sent a verification link to ${email}. You can verify anytime — `}
-          {gatedDownload ? 'your download is starting now.' : 'you are all set.'}
+          {`We've sent a verification link to ${email}. You can verify anytime — next, please review the beta tester agreement.`}
         </p>
         {assignedCode && (
           <div className="mx-auto w-full max-w-xs rounded-3xl border border-primary/30 bg-primary/5 p-4">
@@ -344,7 +343,7 @@ export default function AuthModal() {
           </div>
         )}
         <button type="button" onClick={closeAuthModal} className={primaryButtonClass}>
-          Done
+          Continue
         </button>
       </div>
     );

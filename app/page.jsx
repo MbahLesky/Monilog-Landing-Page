@@ -76,18 +76,20 @@ const features = [
   }
 ];
 
+// App screenshots showcased in the "A Closer Look" gallery.
 const screenshotItems = [
-  'Dashboard Screen',
-  'Transaction Entry Screen',
-  'Accounts Screen',
-  'Transfers Screen',
-  'Analytics Screen',
-  'Import / Export Screen',
-  'Authentication Screen',
-  'Currency Screen',
-  'Notifications Screen',
-  'Categories Screen',
-  'History Screen'
+  { title: 'Dashboard Overview', gif: '/screenshots/dashboard.webp' },
+  { title: 'Add Transaction', gif: '/screenshots/add_transaction.webp' },
+  { title: 'Transaction History', gif: '/screenshots/transaction_history.webp' },
+  { title: 'Account Management', gif: '/screenshots/accounts.webp' },
+  { title: 'Money Transfers', gif: '/screenshots/transfer.webp' },
+  { title: 'Analytics & Insights', gif: '/screenshots/analytics.webp' },
+  { title: 'Category Management', gif: '/screenshots/category.webp' },
+  { title: 'Import & Export', gif: '/screenshots/export_import.webp' },
+  { title: 'Notifications', gif: '/screenshots/notifications.webp' },
+  { title: 'Personalized Onboarding', gif: '/screenshots/account_setup.webp' },
+  { title: 'Currency Selection', gif: '/screenshots/currency.webp' },
+  { title: 'Secure Authentication', gif: '/screenshots/authenticate.webp' }
 ];
 
 const whyItems = [
@@ -129,43 +131,116 @@ const roadmapItems = [
   }
 ];
 
-// TODO: replace with the real per-scenario Google Form links.
-const feedbackItems = [
+// Placeholder until the per-flow feedback forms go live. Replace each `formUrl`
+// below with its real form link — the cards need no other change.
+const FEEDBACK_FORM_URL = 'https://forms.gle/REPLACE_ME';
+
+// Beta test flows from the Beta Testing Guide. Testers work through them in
+// order — flows 1 and 2 set up the app state every later flow depends on.
+const testFlows = [
   {
-    title: 'Test Sign In & Authentication',
-    steps: [
-      'Create a new account with email and password, or sign in with Google.',
-      'Sign out, then sign back in with the same credentials.',
-      'Try the "forgot password" flow if you used email sign-in.'
+    id: 1,
+    title: 'App Installation',
+    objective: 'Accept the invite, install MoniLog, and confirm it launches.',
+    points: [
+      'Accept the Firebase App Distribution invite',
+      'Download from the Firebase email link',
+      'Allow unknown sources on Android if prompted',
+      'Launch the app to the welcome screen'
     ],
-    formUrl: 'https://forms.gle/REPLACE_ME'
+    screenshots: 1,
+    formUrl: FEEDBACK_FORM_URL
   },
   {
-    title: 'Test Transactions & Transfers',
-    steps: [
-      'Add an income transaction and an expense transaction.',
-      'Edit one of the transactions you just created.',
-      'Transfer money between two accounts and check both balances update.'
+    id: 2,
+    title: 'Onboarding & Tutorials',
+    objective: 'Complete first-time setup and explore the in-app tutorials.',
+    points: [
+      'Sign up with email or Google',
+      'Set display name, language, and currency',
+      'Add starting accounts and opening balances',
+      'Enable the daily reminder, then run two tutorials'
     ],
-    formUrl: 'https://forms.gle/REPLACE_ME'
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
   },
   {
-    title: 'Test Categories & Notifications',
-    steps: [
-      'Assign categories to a few existing transactions.',
-      'Filter your transaction list by category.',
-      'Open notification settings and toggle a preference on or off.'
+    id: 3,
+    title: 'Sign Out & Sign In',
+    objective: 'Verify the authentication flow and password recovery.',
+    points: [
+      'Sign out from Settings or your profile',
+      'Sign back in with email or Google',
+      'Run the Forgot Password flow',
+      'Confirm the reset email arrives'
     ],
-    formUrl: 'https://forms.gle/REPLACE_ME'
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
   },
   {
-    title: 'Test Import & Export',
-    steps: [
-      'Export your transactions to a CSV file.',
-      'Make a small change to the exported file.',
-      'Re-import the file and confirm the data looks correct.'
+    id: 4,
+    title: 'Transactions',
+    objective: 'Add, edit, and delete income and expense entries.',
+    points: [
+      'Add an income transaction for today',
+      'Add an expense transaction for today',
+      'Edit a detail on one transaction',
+      'Delete the other and check the balance updates'
     ],
-    formUrl: 'https://forms.gle/REPLACE_ME'
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 5,
+    title: 'Accounts, Transfers & Currency',
+    objective: 'Manage accounts, transfer with a fee, and switch currency.',
+    points: [
+      'Update an existing account balance',
+      'Add a new account and delete another',
+      'Transfer between accounts including a fee',
+      'Change the currency and confirm it applies everywhere'
+    ],
+    screenshots: 3,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 6,
+    title: 'Categories & Analytics',
+    objective: 'Create and manage categories, then review the analytics screen.',
+    points: [
+      'Add an income category and an expense category',
+      'Edit an existing default category',
+      'Reassign a past transaction to a new category',
+      'Review the category and per-account breakdown'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 7,
+    title: 'Notifications, Theme & Language',
+    objective: 'Check reminders, theme switching, and language switching.',
+    points: [
+      'Confirm the daily reminder is enabled',
+      'Find the notification in your notification bar',
+      'Switch between Light and Dark themes',
+      'Switch between English and French'
+    ],
+    screenshots: 3,
+    formUrl: FEEDBACK_FORM_URL
+  },
+  {
+    id: 8,
+    title: 'Export, Import, Backup & Restore',
+    objective: 'Test the full data lifecycle end to end.',
+    points: [
+      'Export your data as CSV',
+      'Clear local data, then import the CSV back',
+      'Create a local JSON backup',
+      'Clear again and restore from the backup'
+    ],
+    screenshots: 2,
+    formUrl: FEEDBACK_FORM_URL
   }
 ];
 
@@ -174,7 +249,7 @@ const faqs = [
   { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
   { q: 'Will iOS be supported?', a: 'Yes, an iOS version is on our roadmap as we build on a stable Android beta and strong cross-platform foundations.' },
   { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
-  { q: 'How can I submit feedback?', a: 'Feedback tools are coming soon. As the beta progresses, we will share dedicated forms for each test scenario.' }
+  { q: 'How can I submit feedback?', a: 'Sign in and open the Feedback section. Each of the eight test flows has its own form — complete the steps, attach the required screenshots, and submit.' }
 ];
 
 function UserAvatar({ user, initial, sizeClass }) {
@@ -294,6 +369,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
 function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { activeId, containerRef } = useFullPageScroll();
+  const { requestDownload } = useAuth();
 
   const toId = (item) => item.toLowerCase().replace(/\s+/g, '-');
 
@@ -332,7 +408,12 @@ function SiteHeader() {
         </nav>
         <div className="hidden items-center gap-3 md:flex">
           <HeaderAuth />
-          <a href={apkDownloadUrl} download className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95">
+          <a
+            href={apkDownloadUrl}
+            download
+            onClick={(e) => requestDownload(e, { location: 'header' })}
+            className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95"
+          >
             Download Beta
           </a>
         </div>
@@ -363,7 +444,10 @@ function SiteHeader() {
             <a
               href={apkDownloadUrl}
               download
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={(e) => {
+                requestDownload(e, { location: 'header_mobile' });
+                setMobileMenuOpen(false);
+              }}
               className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
             >
               Download Beta
@@ -386,7 +470,7 @@ export default function Home() {
         <Slide id="hero" className="pt-28">
           <div className="pointer-events-none absolute left-0 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
           <div className="pointer-events-none absolute right-0 top-24 h-72 w-72 translate-x-1/3 rounded-full bg-secondary/15 blur-3xl" />
-          <HeroSection />
+          <HeroSection apkDownloadUrl={apkDownloadUrl} />
         </Slide>
 
         {/* Slide 2: Features */}
@@ -411,12 +495,12 @@ export default function Home() {
 
         {/* Slide 6: Beta Program */}
         <Slide id="beta-program">
-          <BetaProgramSection apkDownloadUrl={apkDownloadUrl} />
+          <BetaProgramSection />
         </Slide>
 
-        {/* Slide 7: Feedback / Download CTA — CTA to join beta when signed out, feedback prompts once signed in */}
+        {/* Slide 7: Feedback / Download CTA — CTA to join beta when signed out, test flows once signed in */}
         <Slide id="feedback">
-          <FeedbackSection apkDownloadUrl={apkDownloadUrl} feedbackItems={feedbackItems} />
+          <FeedbackSection apkDownloadUrl={apkDownloadUrl} testFlows={testFlows} />
         </Slide>
 
         {/* Tail: FAQ + Footer */}
