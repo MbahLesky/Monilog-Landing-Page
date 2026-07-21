@@ -3,18 +3,11 @@
 import { Reveal, RevealHeading } from '../../components/Reveal';
 import Parallax from '../../components/Parallax';
 import { useAuth } from '../../context/AuthContext';
-import { trackFirebaseEvent } from '../../lib/firebase';
 
 export default function HeroSection({ apkDownloadUrl }) {
-  const { user, openAuthModal } = useAuth();
+  const { requestDownload } = useAuth();
 
-  const onGatedDownload = (event) => {
-    trackFirebaseEvent('download_click', { location: 'hero' });
-    if (!user) {
-      event.preventDefault();
-      openAuthModal({ mode: 'signup', intent: 'download' });
-    }
-  };
+  const onGatedDownload = (event) => requestDownload(event, { location: 'hero' });
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">

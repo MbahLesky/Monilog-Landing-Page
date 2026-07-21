@@ -1,6 +1,7 @@
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
+import AgreementModal from '../components/AgreementModal';
 import GoogleOneTap from '../components/GoogleOneTap';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import { initializeFirebaseAnalytics } from '../lib/firebase';
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           {children}
           <AuthModal />
+          <AgreementModal />
           <GoogleOneTap />
         </AuthProvider>
         <FirebaseAnalyticsInit />

@@ -5,7 +5,6 @@ import { FullPageScrollProvider, ScrollViewport, useFullPageScroll } from '../co
 import Slide from '../components/Slide';
 import ProgressBar from '../components/ProgressBar';
 import { useAuth } from '../context/AuthContext';
-import { trackFirebaseEvent } from '../lib/firebase';
 import HeroSection from './sections/HeroSection';
 import FeaturesSection from './sections/FeaturesSection';
 import ScreenshotsSection from './sections/ScreenshotsSection';
@@ -370,6 +369,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
 function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { activeId, containerRef } = useFullPageScroll();
+  const { requestDownload } = useAuth();
 
   const toId = (item) => item.toLowerCase().replace(/\s+/g, '-');
 
@@ -411,7 +411,7 @@ function SiteHeader() {
           <a
             href={apkDownloadUrl}
             download
-            onClick={() => trackFirebaseEvent('download_click', { location: 'header' })}
+            onClick={(e) => requestDownload(e, { location: 'header' })}
             className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95"
           >
             Download Beta
@@ -444,8 +444,8 @@ function SiteHeader() {
             <a
               href={apkDownloadUrl}
               download
-              onClick={() => {
-                trackFirebaseEvent('download_click', { location: 'header_mobile' });
+              onClick={(e) => {
+                requestDownload(e, { location: 'header_mobile' });
                 setMobileMenuOpen(false);
               }}
               className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"

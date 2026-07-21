@@ -6,15 +6,9 @@ import { useAuth } from '../../context/AuthContext';
 import { trackFirebaseEvent } from '../../lib/firebase';
 
 export default function FeedbackSection({ apkDownloadUrl, testFlows }) {
-  const { user, openAuthModal } = useAuth();
+  const { user, openAuthModal, requestDownload } = useAuth();
 
-  const onGatedDownload = (event) => {
-    trackFirebaseEvent('download_click', { location: 'feedback_cta' });
-    if (!user) {
-      event.preventDefault();
-      openAuthModal({ mode: 'signup', intent: 'download' });
-    }
-  };
+  const onGatedDownload = (event) => requestDownload(event, { location: 'feedback_cta' });
 
   if (user) {
     return (
