@@ -5,6 +5,9 @@ import { createPortal } from 'react-dom';
 import { useAuth } from '../context/AuthContext';
 import { mapAuthError } from '../lib/authErrors';
 
+// Kept in step with the web app's registerSchema (Monilog - Web/src/features/auth/schemas.ts).
+const MIN_PASSWORD_LENGTH = 8;
+
 const inputClass =
   'w-full rounded-3xl border border-slate-700 bg-slate-900/95 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30';
 
@@ -174,6 +177,13 @@ export default function AuthModal() {
     if (!email.trim() || !password) {
       setStatus('error');
       setMessage('Please enter your email and password.');
+      return;
+    }
+    // Matches the web app's register schema so an account created here can always
+    // sign in there.
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setStatus('error');
+      setMessage(`Password must be at least ${MIN_PASSWORD_LENGTH} characters.`);
       return;
     }
 
@@ -472,7 +482,7 @@ export default function AuthModal() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className={inputClass}
-            placeholder={mode === 'signup' ? 'At least 6 characters' : 'Your password'}
+            placeholder={mode === 'signup' ? `At least ${MIN_PASSWORD_LENGTH} characters` : 'Your password'}
           />
         </label>
 

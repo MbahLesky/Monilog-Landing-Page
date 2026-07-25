@@ -31,11 +31,11 @@ export default function Footer() {
           </div>
           <div>
             <p className="font-semibold text-white">Contact</p>
-            <p className="mt-4 text-slate-400">support@monilog.app</p>
-            <div className="mt-4 flex items-center gap-3 text-slate-500">
+            <p className="mt-4 text-slate-400">mbahlesky4@gmail.com</p>
+            {/* <div className="mt-4 flex items-center gap-3 text-slate-500">
               <span>Twitter</span>
               <span>LinkedIn</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
