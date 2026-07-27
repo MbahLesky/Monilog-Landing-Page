@@ -5,17 +5,15 @@ import HorizontalDeck from '../../components/HorizontalDeck';
 import { useAuth } from '../../context/AuthContext';
 import { trackFirebaseEvent } from '../../lib/firebase';
 
-export default function FeedbackSection({ apkDownloadUrl, testFlows }) {
-  const { user, openAuthModal, requestDownload } = useAuth();
-
-  const onGatedDownload = (event) => requestDownload(event, { location: 'feedback_cta' });
+export default function FeedbackSection({ testFlows }) {
+  const { user, openAuthModal } = useAuth();
 
   if (user) {
     return (
       <div>
         <div className="mb-10 space-y-4 text-center">
           <Reveal as="p" className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">Beta Feedback</Reveal>
-          <RevealHeading text="Eight Test Flows. One Form Each." className="text-3xl font-semibold text-white sm:text-4xl" />
+          <RevealHeading text="Nine Test Flows. One Form Each." className="text-3xl font-semibold text-white sm:text-4xl" />
           <Reveal as="p" delay={1} className="mx-auto max-w-2xl text-base leading-8 text-slate-300">
             Work through the flows in order — installation and onboarding set up everything that follows. Capture the required screenshots, then submit the matching form.
           </Reveal>
@@ -31,7 +29,9 @@ export default function FeedbackSection({ apkDownloadUrl, testFlows }) {
                   Flow {flow.id}
                 </span>
                 <span className="text-xs font-medium text-slate-400">
-                  {flow.screenshots} {flow.screenshots === 1 ? 'screenshot' : 'screenshots'}
+                  {flow.screenshots === 0
+                    ? 'No screenshots needed'
+                    : `${flow.screenshots} ${flow.screenshots === 1 ? 'screenshot' : 'screenshots'}`}
                 </span>
               </div>
               <h3 className="mt-5 text-xl font-semibold text-white">{flow.title}</h3>
@@ -71,9 +71,6 @@ export default function FeedbackSection({ apkDownloadUrl, testFlows }) {
           <Reveal as="p" delay={1} className="mt-4 max-w-2xl text-base leading-7 text-white/90">Version 1.0 Beta</Reveal>
         </div>
         <div className="flex flex-col gap-4 sm:flex-row">
-          <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-deepblue transition hover:bg-slate-100">
-            Download Android APK
-          </a>
           <button
             type="button"
             onClick={() => openAuthModal({ mode: 'signup' })}
