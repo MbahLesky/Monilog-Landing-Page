@@ -5,9 +5,10 @@ import Parallax from '../../components/Parallax';
 import { useAuth } from '../../context/AuthContext';
 
 export default function HeroSection({ apkDownloadUrl }) {
-  const { requestDownload } = useAuth();
+  const { requestDownload, requestWebAppAccess, webAppUrl } = useAuth();
 
   const onGatedDownload = (event) => requestDownload(event, { location: 'hero' });
+  const onGatedWebApp = (event) => requestWebAppAccess(event, { location: 'hero' });
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -29,6 +30,15 @@ export default function HeroSection({ apkDownloadUrl }) {
           </a>
           <a href="#features" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800">
             Learn More
+          </a>
+          <a
+            href={webAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onGatedWebApp}
+            className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+          >
+            Open Web App
           </a>
         </Reveal>
         <Reveal delay={3} className="grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -369,7 +369,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
 function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { activeId, containerRef } = useFullPageScroll();
-  const { requestDownload } = useAuth();
+  const { requestDownload, requestWebAppAccess, webAppUrl } = useAuth();
 
   const toId = (item) => item.toLowerCase().replace(/\s+/g, '-');
 
@@ -409,6 +409,15 @@ function SiteHeader() {
         <div className="hidden items-center gap-3 md:flex">
           <HeaderAuth />
           <a
+            href={webAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => requestWebAppAccess(e, { location: 'header' })}
+            className="rounded-full border border-slate-700 bg-slate-900 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+          >
+            Open Web App
+          </a>
+          <a
             href={apkDownloadUrl}
             download
             onClick={(e) => requestDownload(e, { location: 'header' })}
@@ -441,6 +450,18 @@ function SiteHeader() {
                 </a>
               );
             })}
+            <a
+              href={webAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                requestWebAppAccess(e, { location: 'header_mobile' });
+                setMobileMenuOpen(false);
+              }}
+              className="rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+            >
+              Open Web App
+            </a>
             <a
               href={apkDownloadUrl}
               download

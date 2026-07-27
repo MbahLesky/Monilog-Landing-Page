@@ -18,6 +18,7 @@ import { storeTester, getBetaCodeInfo, getTester, recordAgreementAcceptance } fr
 import { AGREEMENT_VERSION } from '../lib/betaAgreement';
 
 const APK_DOWNLOAD_URL = '/downloads/Monilog-v1.2.1.apk';
+const WEB_APP_URL = 'https://monilog-web.vercel.app';
 const BETA_CODE_STORAGE_KEY = 'monilog:betaCode';
 
 const AuthContext = createContext(null);
@@ -69,6 +70,11 @@ function triggerApkDownload(source) {
   trackFirebaseEvent('download', { source });
 }
 
+function triggerWebAppAccess(source) {
+  trackFirebaseEvent('webapp_open', { source });
+  window.open(WEB_APP_URL, '_blank', 'noopener,noreferrer');
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,8 +88,9 @@ export function AuthProvider({ children }) {
   // we could not read the doc, and an outage must not lock testers out.
   const [agreementStatus, setAgreementStatus] = useState('unknown');
   const [isAgreementOpen, setIsAgreementOpen] = useState(false);
-  // Set when the agreement interrupted a download, so accepting resumes it.
-  const [downloadAfterAgreement, setDownloadAfterAgreement] = useState(false);
+  // Set when the agreement interrupted a gated action (download or web app
+  // access), so accepting resumes it. null | 'download' | 'webapp'.
+  const [pendingAction, setPendingAction] = useState(null);
   // Queues the agreement until the auth modal is out of the way (a fresh sign-up
   // keeps that modal open to show the "verify your email" note).
   const [agreementPromptPending, setAgreementPromptPending] = useState(false);
@@ -155,8 +162,8 @@ export function AuthProvider({ children }) {
     setAuthIntent(null);
   }, []);
 
-  const openAgreement = useCallback(({ thenDownload = false } = {}) => {
-    setDownloadAfterAgreement(thenDownload);
+  const openAgreement = useCallback(({ thenAction = null } = {}) => {
+    setPendingAction(thenAction);
     setIsAgreementOpen(true);
     trackFirebaseEvent('agreement_shown', { version: AGREEMENT_VERSION });
   }, []);
@@ -174,7 +181,7 @@ export function AuthProvider({ children }) {
   // re-prompted the next time they try to download.
   const closeAgreement = useCallback(() => {
     setIsAgreementOpen(false);
-    setDownloadAfterAgreement(false);
+    setPendingAction(null);
   }, []);
 
   // Records acceptance, then resumes a download the agreement interrupted. The
@@ -197,11 +204,10 @@ export function AuthProvider({ children }) {
     trackFirebaseEvent('agreement_accepted', { version: AGREEMENT_VERSION });
     setAgreementStatus('accepted');
     setIsAgreementOpen(false);
-    if (downloadAfterAgreement) {
-      setDownloadAfterAgreement(false);
-      triggerApkDownload('agreement');
-    }
-  }, [downloadAfterAgreement]);
+    if (pendingAction === 'download') triggerApkDownload('agreement');
+    if (pendingAction === 'webapp') triggerWebAppAccess('agreement');
+    setPendingAction(null);
+  }, [pendingAction]);
 
   // Single gate every download button routes through: track the click, then send
   // the tester wherever they still need to go — sign up, sign the agreement, or
@@ -217,9 +223,28 @@ export function AuthProvider({ children }) {
       }
       if (agreementStatus === 'pending') {
         event?.preventDefault();
-        openAgreement({ thenDownload: true });
+        openAgreement({ thenAction: 'download' });
       }
       // 'accepted' (and 'unknown', which fails open) let the anchor download.
+    },
+    [user, agreementStatus, openAuthModal, openAgreement]
+  );
+
+  // Same gate as requestDownload, routing to the web app instead of the APK.
+  const requestWebAppAccess = useCallback(
+    (event, { location = 'unknown' } = {}) => {
+      trackFirebaseEvent('webapp_click', { location });
+
+      if (!user) {
+        event?.preventDefault();
+        openAuthModal({ mode: 'signin', intent: 'webapp' });
+        return;
+      }
+      if (agreementStatus === 'pending') {
+        event?.preventDefault();
+        openAgreement({ thenAction: 'webapp' });
+      }
+      // 'accepted' (and 'unknown', which fails open) let the anchor navigate.
     },
     [user, agreementStatus, openAuthModal, openAgreement]
   );
@@ -232,6 +257,7 @@ export function AuthProvider({ children }) {
   const finishAuth = useCallback(
     async ({ keepOpen = false } = {}) => {
       const wantsDownload = authIntent === 'download';
+      const wantsWebApp = authIntent === 'webapp';
       setAuthIntent(null);
       if (!keepOpen) setIsAuthModalOpen(false);
 
@@ -243,9 +269,10 @@ export function AuthProvider({ children }) {
 
       if (accepted) {
         if (wantsDownload) triggerApkDownload('auth_modal');
+        if (wantsWebApp) triggerWebAppAccess('auth_modal');
         return;
       }
-      setDownloadAfterAgreement(wantsDownload);
+      setPendingAction(wantsDownload ? 'download' : wantsWebApp ? 'webapp' : null);
       setAgreementPromptPending(true);
     },
     [authIntent]
@@ -366,6 +393,8 @@ export function AuthProvider({ children }) {
     closeAgreement,
     acceptAgreement,
     requestDownload,
+    requestWebAppAccess,
+    webAppUrl: WEB_APP_URL,
     openAuthModal,
     closeAuthModal,
     finishAuth,
