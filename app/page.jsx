@@ -14,243 +14,16 @@ import BetaProgramSection from './sections/BetaProgramSection';
 import FeedbackSection from './sections/FeedbackSection';
 import FAQSection from './sections/FAQSection';
 import Footer from './sections/Footer';
-
-// Data
-const navItems = ['Features', 'Screenshots', 'Coming Soon', 'Beta Program', 'Feedback'];
-const apkDownloadUrl = '/downloads/Monilog-v1.2.1.apk';
-
-const features = [
-  {
-    title: 'Dashboard Overview',
-    description: 'See a clear summary of your finances at a glance.',
-    points: ['Financial overview', 'Account balances', 'Recent activity', 'Quick access actions'],
-    label: 'Dashboard Screen'
-  },
-  {
-    title: 'Income & Expense Tracking',
-    description: 'Record every transaction with ease.',
-    points: ['Add income', 'Add expenses', 'Edit transactions', 'Transaction details', 'Organized records'],
-    label: 'Transaction Entry Screen'
-  },
-  {
-    title: 'Account Management',
-    description: 'Manage multiple accounts locally.',
-    points: ['Create accounts', 'Track balances', 'Account summaries', 'Financial organization'],
-    label: 'Accounts Screen'
-  },
-  {
-    title: 'Money Transfers',
-    description: 'Move money between accounts effortlessly.',
-    points: ['Account-to-account transfers', 'Transfer history', 'Transfer fee support'],
-    label: 'Transfers Screen'
-  },
-  {
-    title: 'Analytics & Insights',
-    description: 'Understand where your money goes.',
-    points: ['Spending analysis', 'Income trends', 'Financial summaries', 'Visual reports'],
-    label: 'Analytics Screen'
-  },
-  {
-    title: 'Import & Export',
-    description: 'Keep control of your data.',
-    points: ['CSV import', 'CSV export', 'Data portability', 'Local backups'],
-    label: 'Import / Export Screen'
-  },
-  {
-    title: 'Personalized Onboarding',
-    description: 'Get started in minutes.',
-    points: ['Display name setup', 'Language selection', 'Currency selection', 'Starting balance configuration', 'Notification preferences'],
-    label: 'Onboarding Screen'
-  },
-  {
-    title: 'Categories & Organization',
-    description: 'Sort every transaction into clear, custom categories.',
-    points: ['Custom categories', 'Category-based filtering', 'Spending breakdown by category', 'Icon & color tagging'],
-    label: 'Categories Screen'
-  },
-  {
-    title: 'Smart Notifications',
-    description: 'Stay on top of your finances with timely alerts.',
-    points: ['Balance alerts', 'Transaction reminders', 'Customizable notification preferences', 'Low balance warnings'],
-    label: 'Notifications Screen'
-  }
-];
-
-// App screenshots showcased in the "A Closer Look" gallery.
-const screenshotItems = [
-  { title: 'Dashboard Overview', gif: '/screenshots/dashboard.webp' },
-  { title: 'Add Transaction', gif: '/screenshots/add_transaction.webp' },
-  { title: 'Transaction History', gif: '/screenshots/transaction_history.webp' },
-  { title: 'Account Management', gif: '/screenshots/accounts.webp' },
-  { title: 'Money Transfers', gif: '/screenshots/transfer.webp' },
-  { title: 'Analytics & Insights', gif: '/screenshots/analytics.webp' },
-  { title: 'Category Management', gif: '/screenshots/category.webp' },
-  { title: 'Import & Export', gif: '/screenshots/export_import.webp' },
-  { title: 'Notifications', gif: '/screenshots/notifications.webp' },
-  { title: 'Personalized Onboarding', gif: '/screenshots/account_setup.webp' },
-  { title: 'Currency Selection', gif: '/screenshots/currency.webp' },
-  { title: 'Secure Authentication', gif: '/screenshots/authenticate.webp' }
-];
-
-const whyItems = [
-  { title: 'Simple', body: 'Designed to be easy for anyone to use.' },
-  { title: 'Reliable', body: 'Works even when internet access is unavailable.' },
-  { title: 'Built with Users', body: 'Improved continuously based on community feedback.' }
-];
-
-const roadmapItems = [
-  {
-    title: 'Cloud Sync & Backup',
-    description: 'Keep your transactions and account data available across devices with secure Supabase-backed sync.',
-    points: ['Cross-device sync', 'Automatic backups', 'Reliable restore flow']
-  },
-  {
-    title: 'Chatbot Transaction Logging',
-    description: 'Create entries by describing purchases in plain language, making logging feel effortless.',
-    points: ['Voice or text input', 'Smart categorization', 'Fast transaction entry']
-  },
-  {
-    title: 'WhatsApp Integration',
-    description: 'Capture expenses and transfers from WhatsApp conversations without leaving your workflow.',
-    points: ['Message-based logging', 'Quick reminders', 'Less manual entry']
-  },
-  {
-    title: 'App Lock / PIN',
-    description: 'Add an extra layer of protection so your financial data stays private on the device.',
-    points: ['Passcode or PIN', 'Biometric readiness', 'Secure app access']
-  },
-  {
-    title: 'iOS Version',
-    description: 'Bring the full MoniLog experience to iPhone and iPad with a native iOS release.',
-    points: ['Native iOS app', 'Feature parity with Android', 'App Store release']
-  },
-  {
-    title: 'Advanced Analytics',
-    description: 'Dive deeper into spending patterns with richer charts and custom reports.',
-    points: ['Custom date ranges', 'Category trend charts', 'Exportable reports']
-  }
-];
-
-// Placeholder until the per-flow feedback forms go live. Replace each `formUrl`
-// below with its real form link — the cards need no other change.
-const FEEDBACK_FORM_URL = 'https://forms.gle/REPLACE_ME';
-
-// Beta test flows from the Beta Testing Guide. Testers work through them in
-// order — flows 1 and 2 set up the app state every later flow depends on.
-const testFlows = [
-  {
-    id: 1,
-    title: 'App Installation',
-    objective: 'Accept the invite, install MoniLog, and confirm it launches.',
-    points: [
-      'Accept the Firebase App Distribution invite',
-      'Download from the Firebase email link',
-      'Allow unknown sources on Android if prompted',
-      'Launch the app to the welcome screen'
-    ],
-    screenshots: 1,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 2,
-    title: 'Onboarding & Tutorials',
-    objective: 'Complete first-time setup and explore the in-app tutorials.',
-    points: [
-      'Sign up with email or Google',
-      'Set display name, language, and currency',
-      'Add starting accounts and opening balances',
-      'Enable the daily reminder, then run two tutorials'
-    ],
-    screenshots: 2,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 3,
-    title: 'Sign Out & Sign In',
-    objective: 'Verify the authentication flow and password recovery.',
-    points: [
-      'Sign out from Settings or your profile',
-      'Sign back in with email or Google',
-      'Run the Forgot Password flow',
-      'Confirm the reset email arrives'
-    ],
-    screenshots: 2,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 4,
-    title: 'Transactions',
-    objective: 'Add, edit, and delete income and expense entries.',
-    points: [
-      'Add an income transaction for today',
-      'Add an expense transaction for today',
-      'Edit a detail on one transaction',
-      'Delete the other and check the balance updates'
-    ],
-    screenshots: 2,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 5,
-    title: 'Accounts, Transfers & Currency',
-    objective: 'Manage accounts, transfer with a fee, and switch currency.',
-    points: [
-      'Update an existing account balance',
-      'Add a new account and delete another',
-      'Transfer between accounts including a fee',
-      'Change the currency and confirm it applies everywhere'
-    ],
-    screenshots: 3,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 6,
-    title: 'Categories & Analytics',
-    objective: 'Create and manage categories, then review the analytics screen.',
-    points: [
-      'Add an income category and an expense category',
-      'Edit an existing default category',
-      'Reassign a past transaction to a new category',
-      'Review the category and per-account breakdown'
-    ],
-    screenshots: 2,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 7,
-    title: 'Notifications, Theme & Language',
-    objective: 'Check reminders, theme switching, and language switching.',
-    points: [
-      'Confirm the daily reminder is enabled',
-      'Find the notification in your notification bar',
-      'Switch between Light and Dark themes',
-      'Switch between English and French'
-    ],
-    screenshots: 3,
-    formUrl: FEEDBACK_FORM_URL
-  },
-  {
-    id: 8,
-    title: 'Export, Import, Backup & Restore',
-    objective: 'Test the full data lifecycle end to end.',
-    points: [
-      'Export your data as CSV',
-      'Clear local data, then import the CSV back',
-      'Create a local JSON backup',
-      'Clear again and restore from the backup'
-    ],
-    screenshots: 2,
-    formUrl: FEEDBACK_FORM_URL
-  }
-];
-
-const faqs = [
-  { q: 'What is MoniLog?', a: 'MoniLog is a modern personal finance tracker designed for fast, offline-first money management without requiring an account.' },
-  { q: 'Is MoniLog free?', a: 'Yes. The beta remains free to download and use while we refine the experience with community feedback.' },
-  { q: 'Will iOS be supported?', a: 'Yes, an iOS version is on our roadmap as we build on a stable Android beta and strong cross-platform foundations.' },
-  { q: 'Can I use MoniLog offline?', a: 'Absolutely. MoniLog is built to work offline and store your data locally for privacy and reliability.' },
-  { q: 'How can I submit feedback?', a: 'Sign in and open the Feedback section. Each of the eight test flows has its own form — complete the steps, attach the required screenshots, and submit.' }
-];
+import {
+  navItems,
+  apkDownloadUrl,
+  features,
+  screenshotItems,
+  whyItems,
+  roadmapItems,
+  testFlows,
+  faqs
+} from '../lib/landingContent';
 
 function UserAvatar({ user, initial, sizeClass }) {
   if (user.photoURL) {
@@ -369,7 +142,7 @@ function HeaderAuth({ variant = 'desktop', onNavigate }) {
 function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { activeId, containerRef } = useFullPageScroll();
-  const { requestDownload, requestWebAppAccess, webAppUrl } = useAuth();
+  const { user, requestDownload, requestWebAppAccess, webAppUrl } = useAuth();
 
   const toId = (item) => item.toLowerCase().replace(/\s+/g, '-');
 
@@ -408,23 +181,27 @@ function SiteHeader() {
         </nav>
         <div className="hidden items-center gap-3 md:flex">
           <HeaderAuth />
-          <a
-            href={webAppUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => requestWebAppAccess(e, { location: 'header' })}
-            className="rounded-full border border-slate-700 bg-slate-900 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
-          >
-            Open Web App
-          </a>
-          <a
-            href={apkDownloadUrl}
-            download
-            onClick={(e) => requestDownload(e, { location: 'header' })}
-            className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95"
-          >
-            Download Beta
-          </a>
+          {user && (
+            <>
+              <a
+                href={webAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => requestWebAppAccess(e, { location: 'header' })}
+                className="rounded-full border border-slate-700 bg-slate-900 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+              >
+                Open Web App
+              </a>
+              <a
+                href={apkDownloadUrl}
+                download
+                onClick={(e) => requestDownload(e, { location: 'header' })}
+                className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:opacity-95"
+              >
+                Download Beta
+              </a>
+            </>
+          )}
         </div>
         <button
           onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -450,29 +227,33 @@ function SiteHeader() {
                 </a>
               );
             })}
-            <a
-              href={webAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                requestWebAppAccess(e, { location: 'header_mobile' });
-                setMobileMenuOpen(false);
-              }}
-              className="rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
-            >
-              Open Web App
-            </a>
-            <a
-              href={apkDownloadUrl}
-              download
-              onClick={(e) => {
-                requestDownload(e, { location: 'header_mobile' });
-                setMobileMenuOpen(false);
-              }}
-              className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
-            >
-              Download Beta
-            </a>
+            {user && (
+              <>
+                <a
+                  href={webAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    requestWebAppAccess(e, { location: 'header_mobile' });
+                    setMobileMenuOpen(false);
+                  }}
+                  className="rounded-full border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+                >
+                  Open Web App
+                </a>
+                <a
+                  href={apkDownloadUrl}
+                  download
+                  onClick={(e) => {
+                    requestDownload(e, { location: 'header_mobile' });
+                    setMobileMenuOpen(false);
+                  }}
+                  className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-95"
+                >
+                  Download Beta
+                </a>
+              </>
+            )}
             <HeaderAuth variant="mobile" onNavigate={() => setMobileMenuOpen(false)} />
           </div>
         </div>
@@ -521,7 +302,7 @@ export default function Home() {
 
         {/* Slide 7: Feedback / Download CTA — CTA to join beta when signed out, test flows once signed in */}
         <Slide id="feedback">
-          <FeedbackSection apkDownloadUrl={apkDownloadUrl} testFlows={testFlows} />
+          <FeedbackSection testFlows={testFlows} />
         </Slide>
 
         {/* Tail: FAQ + Footer */}
