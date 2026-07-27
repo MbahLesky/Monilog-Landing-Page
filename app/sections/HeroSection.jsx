@@ -5,9 +5,10 @@ import Parallax from '../../components/Parallax';
 import { useAuth } from '../../context/AuthContext';
 
 export default function HeroSection({ apkDownloadUrl }) {
-  const { requestDownload } = useAuth();
+  const { user, requestDownload, requestWebAppAccess, webAppUrl } = useAuth();
 
   const onGatedDownload = (event) => requestDownload(event, { location: 'hero' });
+  const onGatedWebApp = (event) => requestWebAppAccess(event, { location: 'hero' });
 
   return (
     <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -24,9 +25,22 @@ export default function HeroSection({ apkDownloadUrl }) {
           MoniLog helps you track transactions, move money between accounts, manage multiple balances, and understand your finances with clear analytics. It is designed for simple, reliable, offline-first money management.
         </Reveal>
         <Reveal delay={2} className="flex flex-wrap gap-4">
-          <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
-            Download Beta
-          </a>
+          {user && (
+            <>
+              <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
+                Download Beta
+              </a>
+              <a
+                href={webAppUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onGatedWebApp}
+                className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+              >
+                Open Web App
+              </a>
+            </>
+          )}
           <a href="#features" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800">
             Learn More
           </a>
