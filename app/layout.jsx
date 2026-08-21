@@ -9,7 +9,7 @@ import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 export const metadata = {
   title: 'MoniLog | Personal Finance Beta',
   description: 'MoniLog is an offline-first personal finance tracker in beta testing. Track income, expenses, accounts, transfers, and insights.',
-  metadataBase: new URL('https://monilog.example.com'),
+  metadataBase: new URL('https://monilog.vercel.app'),
   icons: [
     {
       rel: 'icon',
