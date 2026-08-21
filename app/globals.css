@@ -90,3 +90,108 @@ select {
     transform: none;
   }
 }
+
+/* Legal pages (privacy, terms, data deletion) are written as plain semantic
+   markup so the text stays easy to amend. These rules give that markup the
+   site's type scale without pulling in a typography plugin. */
+.legal-prose {
+  color: #cbd5e1;
+  line-height: 1.75;
+}
+
+.legal-prose > * + * {
+  margin-top: 1rem;
+}
+
+.legal-prose h2 {
+  margin-top: 2.75rem;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  scroll-margin-top: 2rem;
+}
+
+.legal-prose h3 {
+  margin-top: 2rem;
+  color: #08D2B5;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.legal-prose a {
+  color: #08D2B5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-prose a:hover {
+  color: #ffffff;
+}
+
+.legal-prose strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.legal-prose ul,
+.legal-prose ol {
+  padding-left: 1.25rem;
+}
+
+.legal-prose ul {
+  list-style: disc;
+}
+
+.legal-prose ol {
+  list-style: decimal;
+}
+
+.legal-prose li + li {
+  margin-top: 0.5rem;
+}
+
+.legal-prose li::marker {
+  color: #08867F;
+}
+
+.legal-prose .table-scroll {
+  overflow-x: auto;
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  border-radius: 1rem;
+}
+
+.legal-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+}
+
+.legal-prose th,
+.legal-prose td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.9);
+}
+
+.legal-prose th {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.6);
+  white-space: nowrap;
+}
+
+.legal-prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.legal-prose .callout {
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(8, 210, 181, 0.25);
+  border-radius: 1rem;
+  background: rgba(8, 210, 181, 0.05);
+}

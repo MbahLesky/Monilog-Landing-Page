@@ -24,9 +24,10 @@ export default function Footer() {
           <div>
             <p className="font-semibold text-white">Resources</p>
             <ul className="mt-4 space-y-3 text-slate-400">
-              <li><a href="#" className="hover:text-primary">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-primary">Terms of Use</a></li>
-              <li><a href="#" className="hover:text-primary">Contact</a></li>
+              <li><a href="/privacy" className="hover:text-primary">Privacy Policy</a></li>
+              <li><a href="/terms" className="hover:text-primary">Terms of Use</a></li>
+              <li><a href="/data-deletion" className="hover:text-primary">Delete your data</a></li>
+              <li><a href="mailto:mbahlesky4@gmail.com" className="hover:text-primary">Contact</a></li>
             </ul>
           </div>
           <div>
