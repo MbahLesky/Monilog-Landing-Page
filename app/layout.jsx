@@ -1,4 +1,5 @@
 import './globals.css';
+import { Poppins } from 'next/font/google';
 import { AuthProvider } from '../context/AuthContext';
 import AuthModal from '../components/AuthModal';
 import AgreementModal from '../components/AgreementModal';
@@ -19,9 +20,20 @@ export const metadata = {
   ]
 };
 
+// Poppins is the brand typeface (docs/brand_visual_language.md), and it is what
+// both apps render in. Weights are the ones the doc calls for: body regular,
+// section titles and buttons 600, large headings 700. Self-hosted by next/font
+// rather than fetched from Google at runtime.
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-poppins'
+});
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={poppins.variable}>
       <body>
         <VercelAnalytics />
         <AuthProvider>
