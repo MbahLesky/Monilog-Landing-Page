@@ -195,3 +195,110 @@ select {
   border-radius: 1rem;
   background: rgba(8, 210, 181, 0.05);
 }
+
+/* WhatsApp guide. The guide is a documentation route like the legal pages, so
+   it reuses .legal-prose for text and tables and adds only what a message
+   reference needs: chat threads, reference cards, and inline message tokens. */
+.guide-prose code {
+  padding: 0.1em 0.4em;
+  border-radius: 0.35rem;
+  background: rgba(8, 210, 181, 0.1);
+  color: #6ee7d7;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.875em;
+  white-space: nowrap;
+}
+
+.guide-prose .thread {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.guide-prose .msg {
+  max-width: min(32rem, 88%);
+  padding: 0.6rem 0.85rem;
+  border-radius: 1rem;
+  font-size: 0.925rem;
+  line-height: 1.55;
+}
+
+/* Outgoing: what the user types. Monospace because every character matters. */
+.guide-prose .msg.out {
+  align-self: flex-end;
+  border-bottom-right-radius: 0.3rem;
+  background: rgba(8, 210, 181, 0.16);
+  color: #d7fbf4;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.875rem;
+}
+
+/* Incoming: the bot's reply, kept as written including line breaks. */
+.guide-prose .msg.in {
+  align-self: flex-start;
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  border-bottom-left-radius: 0.3rem;
+  background: #0f172a;
+  color: #e2e8f0;
+  white-space: pre-line;
+  font-variant-numeric: tabular-nums;
+}
+
+.guide-prose .thread-note {
+  align-self: center;
+  padding: 0.15rem 0.75rem;
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  border-radius: 999px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.guide-prose .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+
+.guide-prose .card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid rgba(30, 41, 59, 0.9);
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.guide-prose .card h3 {
+  margin-top: 0;
+}
+
+.guide-prose .card ul {
+  margin-top: 0;
+  font-size: 0.925rem;
+}
+
+.guide-prose .tag {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.guide-prose .tag.income {
+  background: rgba(8, 210, 181, 0.14);
+  color: #5eead4;
+}
+
+.guide-prose .tag.expense {
+  background: rgba(248, 113, 113, 0.14);
+  color: #fca5a5;
+}

@@ -3,7 +3,7 @@ import Link from 'next/link';
 // The landing page owns scrolling through .snap-container, and globals.css keeps
 // the document itself from scrolling. Legal routes therefore need their own
 // scroll viewport, or their content would be unreachable below the fold.
-export default function LegalPage({ title, updated, summary, children }) {
+export default function LegalPage({ title, updated, summary, bodyClassName = '', children }) {
   return (
     <div className="h-[100dvh] overflow-y-auto bg-slate-950">
       <div className="mx-auto max-w-3xl px-6 pb-24 pt-12 sm:px-8">
@@ -23,7 +23,7 @@ export default function LegalPage({ title, updated, summary, children }) {
           {summary && <p className="mt-6 text-lg leading-relaxed text-slate-300">{summary}</p>}
         </header>
 
-        <div className="legal-prose mt-4">{children}</div>
+        <div className={`legal-prose mt-4 ${bodyClassName}`.trimEnd()}>{children}</div>
 
         <footer className="mt-16 border-t border-slate-800/80 pt-8 text-sm text-slate-500">
           <p>
@@ -34,6 +34,7 @@ export default function LegalPage({ title, updated, summary, children }) {
             .
           </p>
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+            <Link href="/whatsapp-guide" className="hover:text-primary">WhatsApp guide</Link>
             <Link href="/privacy" className="hover:text-primary">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-primary">Terms of Use</Link>
             <Link href="/data-deletion" className="hover:text-primary">Delete your data</Link>
