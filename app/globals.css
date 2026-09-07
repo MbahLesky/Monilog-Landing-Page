@@ -17,7 +17,7 @@ body {
   min-height: 100vh;
   /* The .snap-container owns scrolling; prevent a second document scrollbar. */
   overflow: hidden;
-  background: radial-gradient(circle at top left, rgba(141, 180, 255, 0.14), transparent 28%), radial-gradient(circle at bottom right, rgba(103, 211, 199, 0.18), transparent 26%), #020617;
+  background: radial-gradient(circle at top left, rgba(8, 210, 181, 0.14), transparent 28%), radial-gradient(circle at bottom right, rgba(8, 134, 127, 0.22), transparent 26%), #020617;
 }
 
 /* Full-page snap container: each slide snaps to the top on enter, then scrolls
@@ -64,7 +64,7 @@ select {
 }
 
 ::selection {
-  background: #8DB4FF;
+  background: #08D2B5;
   color: white;
 }
 
@@ -114,13 +114,13 @@ select {
 
 .legal-prose h3 {
   margin-top: 2rem;
-  color: #67D3C7;
+  color: #08D2B5;
   font-size: 1.05rem;
   font-weight: 600;
 }
 
 .legal-prose a {
-  color: #8DB4FF;
+  color: #08D2B5;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -152,7 +152,7 @@ select {
 }
 
 .legal-prose li::marker {
-  color: #67D3C7;
+  color: #08867F;
 }
 
 .legal-prose .table-scroll {
@@ -191,9 +191,9 @@ select {
 
 .legal-prose .callout {
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(141, 180, 255, 0.25);
+  border: 1px solid rgba(8, 210, 181, 0.25);
   border-radius: 1rem;
-  background: rgba(141, 180, 255, 0.06);
+  background: rgba(8, 210, 181, 0.05);
 }
 
 /* WhatsApp guide. The guide is a documentation route like the legal pages, so
@@ -202,8 +202,8 @@ select {
 .guide-prose code {
   padding: 0.1em 0.4em;
   border-radius: 0.35rem;
-  background: rgba(103, 211, 199, 0.12);
-  color: #9ce3da;
+  background: rgba(8, 210, 181, 0.1);
+  color: #6ee7d7;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   font-size: 0.875em;
   white-space: nowrap;
@@ -231,8 +231,8 @@ select {
 .guide-prose .msg.out {
   align-self: flex-end;
   border-bottom-right-radius: 0.3rem;
-  background: rgba(141, 180, 255, 0.16);
-  color: #dfeaff;
+  background: rgba(8, 210, 181, 0.16);
+  color: #d7fbf4;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   font-size: 0.875rem;
 }
@@ -294,8 +294,8 @@ select {
 }
 
 .guide-prose .tag.income {
-  background: rgba(103, 211, 199, 0.16);
-  color: #67D3C7;
+  background: rgba(8, 210, 181, 0.14);
+  color: #5eead4;
 }
 
 .guide-prose .tag.expense {
