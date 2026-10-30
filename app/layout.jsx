@@ -1,15 +1,10 @@
 import './globals.css';
-import { AuthProvider } from '../context/AuthContext';
-import AuthModal from '../components/AuthModal';
-import AgreementModal from '../components/AgreementModal';
-import GoogleOneTap from '../components/GoogleOneTap';
-import FirebaseAnalyticsInit from '../components/FirebaseAnalyticsInit';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 
 export const metadata = {
-  title: 'MoniLog | Personal Finance Beta',
-  description: 'MoniLog is an offline-first personal finance tracker in beta testing. Track income, expenses, accounts, transfers, and insights.',
-  metadataBase: new URL('https://monilog.vercel.app'),
+  title: 'Moniilog | Smart Personal Finance & WhatsApp Tracking',
+  description: 'Moniilog is an offline-first personal finance tracker with conversational WhatsApp logging. Track income, expenses, accounts, transfers, and insights.',
+  metadataBase: new URL('https://moniilog.com'),
   icons: [
     {
       rel: 'icon',
@@ -24,13 +19,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <VercelAnalytics />
-        <AuthProvider>
-          {children}
-          <AuthModal />
-          <AgreementModal />
-          <GoogleOneTap />
-        </AuthProvider>
-        <FirebaseAnalyticsInit />
+        {children}
       </body>
     </html>
   );

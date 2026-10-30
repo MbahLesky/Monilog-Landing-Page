@@ -2,19 +2,14 @@
 
 import { Reveal, RevealHeading } from '../../components/Reveal';
 import Parallax from '../../components/Parallax';
-import { useAuth } from '../../context/AuthContext';
+import { webAppUrl } from '../../lib/landingContent';
 
 export default function HeroSection({ apkDownloadUrl }) {
-  const { user, requestDownload, requestWebAppAccess, webAppUrl } = useAuth();
-
-  const onGatedDownload = (event) => requestDownload(event, { location: 'hero' });
-  const onGatedWebApp = (event) => requestWebAppAccess(event, { location: 'hero' });
-
   return (
     <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
       <div className="space-y-6">
         <Reveal className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-slate-900/80 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
-          Version 1 Beta Testing
+          Offline-First & WhatsApp Connected
         </Reveal>
         <RevealHeading
           as="h1"
@@ -22,31 +17,33 @@ export default function HeroSection({ apkDownloadUrl }) {
           className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
         />
         <Reveal as="p" delay={1} className="max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-          MoniLog helps you track transactions, move money between accounts, manage multiple balances, and understand your finances with clear analytics. It is designed for simple, reliable, offline-first money management.
+          Moniilog helps you record expenses, manage multiple accounts (Cash, Bank, Mobile Money), track transfers with fees, and log transactions effortlessly via WhatsApp. Built offline-first for total control and reliability.
         </Reveal>
         <Reveal delay={2} className="flex flex-wrap gap-4">
-          {user && (
-            <>
-              <a href={apkDownloadUrl} download onClick={onGatedDownload} className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95">
-                Download Beta
-              </a>
-              <a
-                href={webAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={onGatedWebApp}
-                className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
-              >
-                Open Web App
-              </a>
-            </>
-          )}
-          <a href="#features" className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800">
-            Learn More
+          <a
+            href={apkDownloadUrl}
+            download
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-3 text-sm font-semibold text-slate-950 shadow-xl shadow-primary/20 transition hover:opacity-95"
+          >
+            Download Android App
+          </a>
+          <a
+            href={webAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/90 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
+          >
+            Open Web App
+          </a>
+          <a
+            href="#features"
+            className="inline-flex items-center justify-center rounded-full border border-slate-800 bg-slate-950/80 px-6 py-3 text-sm font-semibold text-slate-300 transition hover:bg-slate-900"
+          >
+            Explore Features
           </a>
         </Reveal>
         <Reveal delay={3} className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {['Privacy First', 'Lightweight & Fast', 'Data Control', 'Community Driven'].map((item) => (
+          {['Offline First', 'WhatsApp Chatbot', 'Multi-Account', 'Privacy Protected'].map((item) => (
             <div key={item} className="rounded-3xl border border-slate-800/80 bg-slate-900/80 px-4 py-3 text-sm font-medium text-slate-200 shadow-sm">
               {item}
             </div>
@@ -59,11 +56,9 @@ export default function HeroSection({ apkDownloadUrl }) {
         <div className="absolute right-8 top-[-18px] h-24 w-24 rounded-3xl bg-secondary/20 blur-2xl" />
         <div className="relative overflow-hidden rounded-[2rem] border border-slate-800/80 bg-slate-900/90 p-5 shadow-soft">
           <div className="h-[520px] overflow-hidden rounded-[1.75rem] border border-slate-800/80 bg-slate-950/80 shadow-inner sm:h-[560px]">
-            {/* Negative margin is width-relative, so it always trims the same
-                ~48px of the source: the phone status bar. */}
             <img
               src="/screenshots/dashboard_vid.webp"
-              alt="MoniLog dashboard preview"
+              alt="Moniilog dashboard preview"
               className="-mt-[20px] h-full w-full object-cover object-top"
             />
           </div>
