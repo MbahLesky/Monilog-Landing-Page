@@ -15,7 +15,7 @@
 ---
 
 ## 2. Current / In-Progress Tasks
-- [ ] **LND-006: Domain & Links Alignment (`moniilog.com`)**: Update canonical URL to `https://moniilog.com` and web app links to `https://web.moniilog.com`.
+- ~~[x] **LND-006: Domain & Links Alignment (`moniilog.com`)**: Update canonical URL to `https://moniilog.com` and web app links to `https://web.moniilog.com`~~
 - [ ] **LND-007: Update Production APK Distribution**: Host the latest release build of `app-debug.apk` / signed APK (`com.moniilog.app`) in `public/downloads/`.
 
 ---
