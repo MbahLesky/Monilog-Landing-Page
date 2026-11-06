@@ -1,47 +1,57 @@
-# MoniLog Landing Page
+# Moniilog — Landing Page
 
-**MoniLog** is the landing page for an offline-first personal finance tracker beta. This repository hosts the marketing site and provides a direct APK download for the Android beta release.
+**Official Product Website & Direct App Distribution**
 
-## APK Download
+Moniilog Landing Page is the public marketing website showcasing Moniilog's offline-first privacy, multi-platform synchronization, and WhatsApp bot assistant. It provides direct APK downloads and feature walkthroughs.
 
-The Android app is available as a direct download from the project:
+---
 
-- `public/downloads/monilog-v1_1-release.apk`
+## Key Features
 
-The app landing page includes download buttons that point directly to this APK.
+- **Product Showcase:** Highlights offline-first SQLite/IndexedDB architecture, Supabase cloud sync, and WhatsApp financial bot.
+- **Direct APK Distribution:** Hosted Android APK download buttons.
+- **Interactive FAQ & Feature Previews:** Responsive FAQ accordion and detailed capability sections.
+- **Modern Responsive Design:** Built with Next.js 15, Tailwind CSS, and Framer Motion.
 
-## App Overview
+---
 
-MoniLog is built to help users manage money without forcing an account login. It focuses on fast local storage, offline capability, and easy finance workflows.
+## Landing Page Task Registry & Roadmap
 
-### Key features
+> [!IMPORTANT]
+> **Workflow Protocol:** Tasks specific to the landing page and marketing distribution are tracked here. When completed, tasks are struck through (`~~[x] ...~~`). Proposed tasks must be approved before implementation.
 
-- Dashboard overview for a quick financial snapshot
-- Income and expense tracking
-- Multiple account management
-- Account-to-account money transfers
-- Analytics and insights for spending trends
-- CSV import and export for portability
-- Personalized onboarding with currency and preference setup
-- Settings and customization for categories, notifications, and data management
+### Completed Landing Page Milestones
+- ~~[x] **LND-001:** Update branding, product copy, and metadata to **Moniilog**~~
+- ~~[x] **LND-002:** Remove legacy beta/tester terminology across marketing pages~~
+- ~~[x] **LND-003:** Create feature showcase highlighting offline-first privacy, multi-platform sync, and WhatsApp bot~~
+- ~~[x] **LND-004:** Implement responsive navigation, hero section, interactive FAQs, and dark mode styling~~
+- ~~[x] **LND-005:** Provide direct Android APK download hosting for distribution~~
 
-## Project structure
+### Current / In-Progress Tasks
+- [ ] **LND-006: Update Production APK Distribution**: Host the latest release build of `app-debug.apk` / signed APK in `public/downloads/`.
+- [ ] **LND-007: Live Web App Link**: Connect "Launch Web App" CTA to point to the live hosted web application URL.
 
-- `app/` - Next.js app routes and page layout
-- `components/` - Reusable React components
-- `public/downloads/` - Hosted APK download file
-- `public/icons/` - Static app icon assets
-- `lib/` - app utilities and Firebase configuration
+### Proposed Upcoming Tasks (Pending Approval)
+- [ ] **LND-008: Production Hosting Deployment**: Deploy landing page to Vercel or Netlify with custom domain (`moniilog.com`).
+- [ ] **LND-009: Product Demo Video / Interactive Mockup**: Embed interactive preview or video walkthrough of mobile & WhatsApp experience.
 
-## Running locally
+---
 
-```bash
-npm install
-npm run dev
-```
+## Running Locally
 
-Then open the site at `http://localhost:3000`.
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Notes
+2. Start development server:
+   ```bash
+   npm run dev
+   ```
 
-If you deploy the site, the APK remains available via the app's download buttons and via `/downloads/monilog-v1_1-release.apk`.
+3. Open `http://localhost:3000` in your browser.
+
+4. Build for production:
+   ```bash
+   npm run build
+   ```
